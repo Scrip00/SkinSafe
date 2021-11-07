@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF3700B3"
+    tools:context=".ResultActivity">
+
+    <ImageView
+        android:id="@+id/photoImage"
+        android:layout_width="180dp"
+        android:layout_height="140dp"
+        android:layout_centerInParent="false"
+        android:layout_marginHorizontal="120dp"
+        android:layout_marginTop="95dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <Spinner
+        android:id="@+id/items_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="250dp"
+        android:scrollbarSize="10dp" />
+
+    <Button
+        android:id="@+id/submitBtn"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="530dp"
+        android:layout_marginRight="30dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Take picture" />
+
+    <Button
+        android:id="@+id/submitBtn2"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="530dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Upload photo" />
+
+    <Button
+        android:id="@+id/submitBtn3"
+        android:layout_width="227dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="100dp"
+        android:layout_marginTop="450dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Submit changes" />
+
+    <EditText
+        android:id="@+id/editTextName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:fontFamily="@font/roboto_bold"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        android:textColor="#9A7FFF"
+        android:textColorHighlight="#7C58FF"
+        android:textColorLink="#7C58FF"
+        android:textSize="20dp"
+        tools:text="Type preferrable name" />
+
+    <TextView
+        android:id="@+id/textViewDesc"
+        android:layout_width="371dp"
+        android:layout_height="117dp"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="320dp"
+        android:fontFamily="@font/roboto_bold"
+        android:textColor="#9A7FFF"
+        android:textSize="25dp" />
+
+</RelativeLayout>

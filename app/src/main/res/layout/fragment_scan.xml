@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF3700B3">
+
+    <TextView
+        android:id="@+id/textViewDesc3"
+        android:layout_width="356dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="180dp"
+        android:fontFamily="@font/roboto_black_italic"
+        android:text="OR"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="#9A7FFF"
+        android:textSize="70dp" />
+
+    <TextView
+        android:id="@+id/textViewDesc4"
+        android:layout_width="356dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="500dp"
+        android:fontFamily="@font/roboto_black_italic"
+        android:text="Note: try to take the photo so that the subject is approximately in the middle of the camera. Otherwise, the program may not recognize the formation correctly."
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="#9A7FFF"
+        android:textSize="20dp" />
+
+    <Button
+        android:id="@+id/takePicBtn"
+        android:layout_width="210dp"
+        android:layout_height="62dp"
+        android:layout_marginHorizontal="100dp"
+        android:layout_marginTop="100dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Take picture" />
+
+    <Button
+        android:id="@+id/uploadFromFileBtn"
+        android:layout_width="214dp"
+        android:layout_height="65dp"
+        android:layout_marginHorizontal="100dp"
+        android:layout_marginTop="300dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Upload from file" />
+</RelativeLayout>
