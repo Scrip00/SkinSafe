@@ -17,6 +17,7 @@ Technologies we used:
 Java
 Python
 AI/Machine Learning
+
 Challenges we ran into:
 Since this was the first experience of creating a complex application, our team faced the problem of lack of specific knowledge, which was quickly resolved thanks to Google.
 
