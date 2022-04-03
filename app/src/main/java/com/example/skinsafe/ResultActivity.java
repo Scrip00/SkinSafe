@@ -12,6 +12,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.skinsafe.Database.DatabaseClass;
+import com.example.skinsafe.Database.UserModel;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -143,7 +146,8 @@ public class ResultActivity extends AppCompatActivity {
             }
         });
         if (save){
-            saveToFile(output, bitMap);
+//            saveToFile(output, bitMap);
+            saveToDatabase(output, bitMap);
         }
 
     }
@@ -167,8 +171,15 @@ public class ResultActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
-
+    private void saveToDatabase(float[] output, Bitmap bitMap){
+        UserModel model = new UserModel();
+        model.setImage(bitMap);
+        model.setTime(Calendar.getInstance().getTime().toString());
+        model.setResults(output);
+        model.setNext(-1);
+        DatabaseClass.getDatabase(getApplicationContext()).getDao().insertAllData(model);
     }
 
     private void writeToFile(String data) {
