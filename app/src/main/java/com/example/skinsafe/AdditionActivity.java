@@ -79,7 +79,6 @@ public class AdditionActivity extends AppCompatActivity {
         } else {
             id = Integer.valueOf(intent.getExtras().get("ID").toString());
         }
-        Log.d("This app", String.valueOf(id));
         photoImage = findViewById(R.id.photoImage);
         textViewDesc = findViewById(R.id.textViewDesc);
         submitBtn = findViewById(R.id.submitBtn);
@@ -95,14 +94,10 @@ public class AdditionActivity extends AppCompatActivity {
             submitChangesBtn.setVisibility(View.INVISIBLE);
         } else {
             List<String> listt = readFromFile();
-            for (String ll: listt){
-                Log.d("LLLL", ll);
-            }
             for (int i = 0; i < listt.size(); i++){
                 if (Integer.valueOf(listt.get(i).split(",")[6].split("\\.")[0].split("_")[1]) == id){
                     File temp = new File(getFilesDir().getPath());
                     for (File file: temp.listFiles()){
-                        Log.d("MyApp", file.getName());
                         if (file.getName().split("\\.")[0].split("_")[0].equals("track") && Integer.valueOf(file.getName().split("\\.")[0].split("_")[1]) == id){
                             tempBit = BitmapFactory.decodeFile(file.getPath());
                         }
@@ -249,7 +244,6 @@ public class AdditionActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Log.d("SkinSafe", "LLOOOOL");
         }
     }
 
@@ -273,7 +267,6 @@ public class AdditionActivity extends AppCompatActivity {
             openResultActivity(output, bitmap);
         } catch (Exception ex){
             ex.printStackTrace();
-            Log.d("SkinSafe", "DDDDD");
         }
     }
 
@@ -282,7 +275,6 @@ public class AdditionActivity extends AppCompatActivity {
         for (int i = 0; i < 6; i++){
             out[i] = output[0][i];
         }
-        Log.d("СУКА", "БЛЯЯЯ/Я");
 
         /*Intent intent = new Intent(this, ResultActivity.class);
         intent.putExtra("output", out);
@@ -297,7 +289,6 @@ public class AdditionActivity extends AppCompatActivity {
     }
 
     private void saveToFile(float[] output, Bitmap bitMap, int idd, boolean neww){
-        Log.d("СУКА", "БЛЯЯЯЯ");
         String name = "track_" + String.valueOf(idd) + ".png";
         if (neww == true){
             try {
@@ -311,7 +302,6 @@ public class AdditionActivity extends AppCompatActivity {
                 }
                 Date currentTime = Calendar.getInstance().getTime();
                 temp += output[0] + "," + output[1] + "," + output[2] + "," + output[3] + "," + output[4] + "," + output[5] + "," + name + "," + currentTime + "," + selected + "," + opttext;
-                Log.d("СУКА", temp);
                 writeToFile(temp);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -325,12 +315,8 @@ public class AdditionActivity extends AppCompatActivity {
                 out.close();
                 List<String> list = new ArrayList<>(readFromFile());
                 String temp = "";
-                Log.d("KKKd", "LOOOOL");
                 for (int i = 0; i < list.size(); i++){
-                    Log.d("KKKd", list.get(i).split(",")[6]);
-                    Log.d("KKK", String.valueOf(id));
                     if (list.get(i).split(",")[6].split("\\.")[0].split("_")[0].equals("track") && list.get(i).split(",")[6].split("\\.")[0].split("_").length > 1 && Integer.parseInt(list.get(i).split(",")[6].split("\\.")[0].split("_")[1]) == idd){
-                        Log.d("HELP MEEEE", selected);
                         Date currentTime = Calendar.getInstance().getTime();
                         temp += output[0] + "," + output[1] + "," + output[2] + "," + output[3] + "," + output[4] + "," + output[5] + "," + name + "," + currentTime + "," + selected + "," + opttext;
                         if (i != list.size() - 1){
@@ -343,8 +329,6 @@ public class AdditionActivity extends AppCompatActivity {
                         }
                     }
                 }
-                Log.d("LOL", "LOL");
-                Log.d("LOL", String.valueOf(idd));
                 writeToFile(temp);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -364,13 +348,11 @@ public class AdditionActivity extends AppCompatActivity {
         int c = 0;
         Set<Integer> set = new HashSet<>();
         for (File file: temp.listFiles()){
-            Log.d("MyApp", file.getName());
             if (file.getName().split("\\.")[0].split("_")[0].equals("track")){
                 c++;  //his_1
                 set.add(Integer.valueOf(file.getName().split("\\.")[0].split("_")[1]));
             }
         }
-        Log.d("MyApp", String.valueOf(c));
         for (int i = 0; i < c; i++){
             if (!set.contains(i)){
                 c = i;

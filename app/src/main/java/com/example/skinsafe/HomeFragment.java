@@ -71,7 +71,6 @@ public class HomeFragment extends Fragment {
         List<String> list= readFromFile();
         Set<String> set = new HashSet<>();
         for (int i = 0; i < list.size(); i++){
-            Log.d("HELP", list.get(i));
             if (!list.get(i).split(",")[8].equals(null) && !list.get(i).split(",")[8].equals("")){
                 set.add(list.get(i).split(",")[8]);
             }
@@ -133,7 +132,6 @@ public class HomeFragment extends Fragment {
             humanView.setImageDrawable(d);
             ims.close();
         } catch (IOException e) {
-            Log.d("SkinSafe","I am here");
             e.printStackTrace();
         }
         return rootView;

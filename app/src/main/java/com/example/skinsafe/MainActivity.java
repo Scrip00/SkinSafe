@@ -9,12 +9,9 @@ import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +19,6 @@ import androidx.fragment.app.Fragment;
 
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 
 import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.Interpreter;
@@ -51,22 +47,12 @@ public class MainActivity extends AppCompatActivity {
             bottomNav.setSelectedItemId(R.id.nav_track);
         }
 
-        //humanView = findViewById(R.id.humanView);
         try {
             InputStream ims = getAssets().open("human.png");
-            Drawable d = Drawable.createFromStream(ims, null);
-            //humanView.setImageDrawable(d);
             ims.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //button = findViewById(R.id.openCameraButton);
-        /*button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dispatchTakePictureIntent();
-            }
-        });*/
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
@@ -74,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     Fragment selectedFragment = null;
-
                         switch (item.getItemId()){
                             case R.id.nav_home:
                                 selectedFragment = new HomeFragment();
@@ -88,12 +73,8 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.nav_track:
                                 selectedFragment = new TrackFragment();
                                 break;
-
                         }
-
-
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
-
                     return true;
                 }
             };
@@ -104,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-
         } catch (ActivityNotFoundException e) {
             // display error state to the user
         }
@@ -115,13 +95,11 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            //imageView.setImageBitmap(imageBitmap);
             try {
                 newCalcNN(imageBitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Log.d("SkinSafe", "LLOOOOL");
         }
     }
 
@@ -145,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
             openResultActivity(output, bitmap);
         } catch (Exception ex){
             ex.printStackTrace();
-            Log.d("SkinSafe", "DDDDD");
         }
     }
 

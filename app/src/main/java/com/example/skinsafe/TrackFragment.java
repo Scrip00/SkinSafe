@@ -78,17 +78,13 @@ public class TrackFragment extends Fragment {
         File temp = new File(getContext().getFilesDir().getPath());
 
         for (File file: temp.listFiles()){
-            Log.d("This app", file.getName());
             if (file.getName().split("\\.")[0].split("_")[0].equals("track") && file.getName().split("\\.")[0].split("_").length > 1){
-                //Log.d("MyApp", file.getPath());
                 Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
                 imgs.add(bitmap);  //his_1
                 List<String> tempList = new ArrayList<>(readFromFile());
-                Log.d("MyApp", String.valueOf(tempList.size()));
                 fileName.add(file.getName());
                 for (int i = 0; i < tempList.size(); i++){
                     String[] dat = tempList.get(i).split(",");
-                    Log.d("MyApppppppppppppppp", dat[6]);
 
                     if (dat[6].equals(file.getName())){
                         float[] fl = new float[6];
@@ -114,9 +110,7 @@ public class TrackFragment extends Fragment {
                 }
             }
         }
-        Log.d("This app", String.valueOf(textMatch.size()));
-        Log.d("This app", String.valueOf(textDate.size()));
-        Log.d("This app", String.valueOf(imgs.size()));
+
         list.setAdapter(new listAdapter(textMatch, textDate, imgs, this.getContext(), fileName));
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,7 +204,6 @@ public class TrackFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), AdditionActivity.class);
-                    Log.d("PPPPPPPP", fileName.get(position).split("\\.")[0].split("_")[1]);
                     intent.putExtra("ID", fileName.get(position).split("\\.")[0].split("_")[1]);
                     //intent.putExtra("imageBitmap", imageBitmap);
                     startActivity(intent);

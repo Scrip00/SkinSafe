@@ -12,7 +12,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -27,24 +30,30 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.Interpreter;
 import org.tensorflow.lite.support.image.TensorImage;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ScanFragment extends Fragment {
     private Button takePicBtn, uploadFromFileBtn;
     public static final int PICK_IMAGE = 1;
     static final int REQUEST_IMAGE_CAPTURE = 2;
     private View rootView;
+    private String currentPhotoPath;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -79,12 +88,40 @@ public class ScanFragment extends Fragment {
 
     public void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        try {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-
-        } catch (ActivityNotFoundException e) {
-            // display error state to the user
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(getContext(),
+                        "com.example.skinsafe.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
         }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 
     @Override
@@ -94,27 +131,34 @@ public class ScanFragment extends Fragment {
             if (data == null) {
                 //Display an error
             }
+            // Проверить работает ли
+            File photoFile = null;
             try {
+                photoFile = createImageFile();
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
                 InputStream inputStream = getContext().getContentResolver().openInputStream(data.getData());
                 Bitmap imageBitmap = BitmapFactory.decodeStream(inputStream);
-                newCalcNN(imageBitmap);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                FileOutputStream out = new FileOutputStream(photoFile);
+                imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+                Intent intent = new Intent(getActivity(), PickAndChooseActivity.class);
+                intent.putExtra("filePath", currentPhotoPath);
+                startActivity(intent);
+            } else {
+                Toast.makeText(getActivity().getApplicationContext(), "File couldn't be created", Toast.LENGTH_SHORT);
+            }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            //imageView.setImageBitmap(imageBitmap);
-            try {
-                newCalcNN(imageBitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Log.d("SkinSafe", "LLOOOOL");
+            Bitmap imageBitmap = BitmapFactory.decodeFile(currentPhotoPath);
+            Log.d("LMAO", String.valueOf(imageBitmap.getHeight()));
+            Log.d("LMAO", String.valueOf(imageBitmap.getWidth()));
+            Log.d("LMAO", currentPhotoPath);
+            Intent intent = new Intent(getActivity(), PickAndChooseActivity.class);
+            intent.putExtra("filePath", currentPhotoPath);
+            startActivity(intent);
         }
     }
 
@@ -138,7 +182,6 @@ public class ScanFragment extends Fragment {
             openResultActivity(output, bitmap);
         } catch (Exception ex){
             ex.printStackTrace();
-            Log.d("SkinSafe", "DDDDD");
         }
     }
 
@@ -153,7 +196,7 @@ public class ScanFragment extends Fragment {
         startActivity(intent);
     }
 
-    private float[][][][] bitmapToInputArray(Bitmap oldbitmap) {
+    public static float[][][][] bitmapToInputArray(Bitmap oldbitmap) {
         Bitmap bitmap= oldbitmap;
         bitmap = Bitmap.createScaledBitmap(bitmap, 200, 200, true);
         int batchNum = 0;

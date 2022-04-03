@@ -67,12 +67,9 @@ public class HistoryFragment extends Fragment {
                 Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
                 imgs.add(bitmap);  //his_1
                 List<String> tempList = new ArrayList<>(readFromFile());
-
-                Log.d("MyApp", String.valueOf(tempList.size()));
                 fileName.add(file.getName());
                 for (int i = 0; i < tempList.size(); i++){
                     String[] dat = tempList.get(i).split(",");
-                    Log.d("MyApp", dat[6]);
                     if (dat[6].equals(file.getName())){
                         float[] fl = new float[6];
                         for (int j = 0; j < 6; j++){
@@ -104,7 +101,6 @@ public class HistoryFragment extends Fragment {
                 }
             }
         }
-        Log.d("MyApp", String.valueOf(imgs.size()));
 
         list = (ListView) rootView.findViewById(R.id.list_1);
         list.setAdapter(new listAdapter(textMatch, textDate, imgs, getContext(), fileName));
@@ -224,13 +220,11 @@ public class HistoryFragment extends Fragment {
         int c = 0;
         Set<Integer> set = new HashSet<>();
         for (File file: temp.listFiles()){
-            Log.d("MyApp", file.getName());
             if (file.getName().split("\\.")[0].split("_")[0].equals("his")){
                 c++;  //his_1
                 set.add(Integer.valueOf(file.getName().split("\\.")[0].split("_")[1]));
             }
         }
-        Log.d("MyApp", String.valueOf(c));
         for (int i = 0; i < c; i++){
             if (!set.contains(i)){
                 c = i;

@@ -53,7 +53,6 @@ public class ResultActivity extends AppCompatActivity {
         float[] output = intent.getFloatArrayExtra("output");
         Bitmap bitMap = (Bitmap) intent.getExtras().get("imageBitmap");
         photoImage.setImageBitmap(bitMap);
-        Log.d("Result", String.valueOf(output[0]));
         setDiagnoze(output, bitMap);
 
     }
@@ -90,7 +89,6 @@ public class ResultActivity extends AppCompatActivity {
                         break;
                     case 0:
                         secondDig4.setText(digMap.get(list.get(i)) + " with chance: " + df.format(list.get(i) * 100) + "%" + "\n");
-                        Log.d("HELP", "LOL");
                         break;
                 }
             }
@@ -217,12 +215,10 @@ public class ResultActivity extends AppCompatActivity {
         File temp = new File(this.getFilesDir().getPath());
         int c = 0;
         for (File file: temp.listFiles()){
-            Log.d("MyApp", file.getName());
             if (file.getName().split("\\.")[0].split("_")[0].equals("his")){
                 c++;  //his_1
             }
         }
-        Log.d("MyApp", String.valueOf(c));
         return c;
     }
 
