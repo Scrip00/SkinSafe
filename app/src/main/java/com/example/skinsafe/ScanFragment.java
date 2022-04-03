@@ -79,9 +79,7 @@ public class ScanFragment extends Fragment {
 
 
     private void openGallery(){
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        Intent intent = new Intent(Intent.ACTION_PICK,  MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
     }
 
@@ -128,36 +126,24 @@ public class ScanFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
-            if (data == null) {
-                //Display an error
-            }
-            // Проверить работает ли
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                InputStream inputStream = getContext().getContentResolver().openInputStream(data.getData());
-                Bitmap imageBitmap = BitmapFactory.decodeStream(inputStream);
-                FileOutputStream out = new FileOutputStream(photoFile);
-                imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-                Intent intent = new Intent(getActivity(), PickAndChooseActivity.class);
-                intent.putExtra("filePath", currentPhotoPath);
-                startActivity(intent);
-            } else {
-                Toast.makeText(getActivity().getApplicationContext(), "File couldn't be created", Toast.LENGTH_SHORT);
-            }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bitmap imageBitmap = BitmapFactory.decodeFile(currentPhotoPath);
-            Log.d("LMAO", String.valueOf(imageBitmap.getHeight()));
-            Log.d("LMAO", String.valueOf(imageBitmap.getWidth()));
+            currentPhotoPath = data.getData().getPath();
             Log.d("LMAO", currentPhotoPath);
+            Log.d("LMAO", String.valueOf(currentPhotoPath.startsWith("/raw/")));
+            if (currentPhotoPath.startsWith("/raw/")) {
+                currentPhotoPath = currentPhotoPath.replaceFirst("/raw/", "");
+            } else if (currentPhotoPath.startsWith("raw:")) {
+                currentPhotoPath = currentPhotoPath.replaceFirst("raw:", "");
+            }
             Intent intent = new Intent(getActivity(), PickAndChooseActivity.class);
             intent.putExtra("filePath", currentPhotoPath);
+            intent.putExtra("rotate", false);
+            startActivity(intent);
+        }
+
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Intent intent = new Intent(getActivity(), PickAndChooseActivity.class);
+            intent.putExtra("filePath", currentPhotoPath);
+            intent.putExtra("rotate", true);
             startActivity(intent);
         }
     }

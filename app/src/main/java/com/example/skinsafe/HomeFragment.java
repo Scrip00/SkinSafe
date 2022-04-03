@@ -1,6 +1,7 @@
 package com.example.skinsafe;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ import org.tensorflow.lite.Interpreter;
 import org.tensorflow.lite.support.image.TensorImage;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -68,6 +70,9 @@ public class HomeFragment extends Fragment {
         oral_genital = rootView.findViewById(R.id.oral_genital);
         palms_soles = rootView.findViewById(R.id.palms_soles);
         upper_extremity = rootView.findViewById(R.id.upper_extremity);
+
+        deleteRecursive(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES));
+
         List<String> list= readFromFile();
         Set<String> set = new HashSet<>();
         for (int i = 0; i < list.size(); i++){
@@ -135,6 +140,14 @@ public class HomeFragment extends Fragment {
             e.printStackTrace();
         }
         return rootView;
+    }
+
+    void deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory())
+            for (File child : fileOrDirectory.listFiles())
+                deleteRecursive(child);
+
+        fileOrDirectory.delete();
     }
 
     private List<String> readFromFile() {

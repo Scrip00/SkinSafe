@@ -29,6 +29,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.mlkit.vision.interfaces.Detector;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.Interpreter;
@@ -53,8 +54,9 @@ public class PickAndChooseActivity extends AppCompatActivity {
     Bitmap initialImage;
     List<Detection> detectionResultsSaved;
     int screenWidth, screenHeight;
-    Button selectBtn;
+    Button selectBtn, cropBtn;
     RectF savedBox;
+    CropImageView cropImageView;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -64,12 +66,18 @@ public class PickAndChooseActivity extends AppCompatActivity {
 
         detectionResult = findViewById(R.id.detectionResult);
         selectBtn = findViewById(R.id.selectBtn);
+        cropBtn = findViewById(R.id.cropBtn);
+        cropImageView = findViewById(R.id.cropImageView);
+        cropImageView.setVisibility(View.INVISIBLE);
+        cropImageView.setAspectRatio(1, 1);
 
         coordinates = new ArrayList<>();
         Intent intent = getIntent();
         String currentPhotoPath = (String) intent.getExtras().get("filePath");
         Bitmap bitMap = BitmapFactory.decodeFile(currentPhotoPath);
-        bitMap = rotateImage(bitMap, 90f);
+        if (intent.getBooleanExtra("rotate", true)) {
+            bitMap = rotateImage(bitMap, 90f);
+        }
         try {
             runObjectDetection(bitMap);
         } catch (IOException e) {
@@ -79,43 +87,68 @@ public class PickAndChooseActivity extends AppCompatActivity {
         selectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (savedBox != null) {
-                    Bitmap resizedBmp;
-                    int x = 0, y = 0, width = 0;
-                    if (savedBox.right - savedBox.left > savedBox.bottom - savedBox.top) {
-                        x = (int) savedBox.left;
-                        y = (int) savedBox.top;
-                        width = (int) (savedBox.right - savedBox.left);
-                    } else {
-                        int horWodrth = (int)(savedBox.right - savedBox.left);
-                        width = (int)(savedBox.bottom - savedBox.top);
-                        x = (int) savedBox.left - (width - horWodrth) / 2;
-                        y = (int) savedBox.top;
-                    }
-                    double scaleInt = 0.15;
-                    x = (int) (x - width * scaleInt);
-                    y = (int) (y - width * scaleInt);
-                    width = (int) (width * (1 + scaleInt * 2));
-                    if (x < 0) x = 0;
-                    if (y < 0) y = 0;
-                    // If box is too big !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    // По-моему хуйня
-                    if (x + width > initialImage.getWidth()) x = initialImage.getWidth() - width;
-                    if (y + width > initialImage.getHeight()) y = initialImage.getHeight() - width;
-                    if (x + width > initialImage.getWidth()) width = initialImage.getWidth();
-                    if (y + width > initialImage.getHeight()) width = initialImage.getHeight();
-                    resizedBmp = Bitmap.createBitmap(initialImage, x, y, width, width);
-                            try {
-                                if (x + width > initialImage.getWidth() || y + width > initialImage.getHeight()) { // Скорее всего нахуй не нужно
-                                    Toast.makeText(getApplicationContext(), "Please, try again or crop by hand", Toast.LENGTH_SHORT);
-                                } else {
-                                    newCalcNN(resizedBmp);
-                                }
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                if (cropBtn.getText().equals("Crop")) {
+                    if (savedBox != null) {
+                        Bitmap resizedBmp;
+                        int x = 0, y = 0, width = 0;
+                        if (savedBox.right - savedBox.left > savedBox.bottom - savedBox.top) {
+                            x = (int) savedBox.left;
+                            y = (int) savedBox.top;
+                            width = (int) (savedBox.right - savedBox.left);
+                        } else {
+                            int horWodrth = (int)(savedBox.right - savedBox.left);
+                            width = (int)(savedBox.bottom - savedBox.top);
+                            x = (int) savedBox.left - (width - horWodrth) / 2;
+                            y = (int) savedBox.top;
+                        }
+                        double scaleInt = 0.15;
+                        x = (int) (x - width * scaleInt);
+                        y = (int) (y - width * scaleInt);
+                        width = (int) (width * (1 + scaleInt * 2));
+                        if (x < 0) x = 0;
+                        if (y < 0) y = 0;
+                        // If box is too big !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        // По-моему хуйня
+                        if (x + width > initialImage.getWidth()) x = initialImage.getWidth() - width;
+                        if (y + width > initialImage.getHeight()) y = initialImage.getHeight() - width;
+                        if (x + width > initialImage.getWidth()) width = initialImage.getWidth();
+                        if (y + width > initialImage.getHeight()) width = initialImage.getHeight();
+                        resizedBmp = Bitmap.createBitmap(initialImage, x, y, width, width);
+                        try {
+                            if (x + width > initialImage.getWidth() || y + width > initialImage.getHeight()) { // Скорее всего нахуй не нужно
+                                Toast.makeText(getApplicationContext(), "Please, try again or crop by hand", Toast.LENGTH_SHORT);
+                            } else {
+                                newCalcNN(resizedBmp);
                             }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Choose smth or crop by hand", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(getApplicationContext(), "Choose smth or crop by hand", Toast.LENGTH_SHORT).show();
+                    Bitmap resizedBmp = cropImageView.getCroppedImage();
+                    try {
+                        newCalcNN(resizedBmp);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        cropBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (cropBtn.getText().equals("Crop")) {
+                    detectionResult.setVisibility(View.INVISIBLE);
+                    cropImageView.setVisibility(View.VISIBLE);
+                    cropBtn.setText("Back to results");
+                } else {
+                    detectionResult.setVisibility(View.VISIBLE);
+                    cropImageView.setVisibility(View.INVISIBLE);
+                    cropBtn.setText("Crop");
+                    cropImageView.resetCropRect();
                 }
             }
         });
@@ -251,6 +284,7 @@ public class PickAndChooseActivity extends AppCompatActivity {
         detectionResultsSaved = results;
         Bitmap imgWithResult = drawDetectionResult(bitmap, results, null);
         detectionResult.setImageBitmap(imgWithResult);
+        cropImageView.setImageBitmap(initialImage);
     }
 
     private Bitmap drawDetectionResult(Bitmap bitmap, List<Detection> detectionResults, RectF selected) {
