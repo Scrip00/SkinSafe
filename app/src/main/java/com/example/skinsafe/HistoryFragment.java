@@ -48,7 +48,7 @@ public class HistoryFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_history, container, false);
         listView = rootView.findViewById(R.id.list_1);
-        listView.setAdapter(new ListAdapter(getContext(), image, time, results, next, keys));
+        listView.setAdapter(new HistoryListAdapter(getContext(), image, time, results, next, keys));
         return rootView;
     }
 }

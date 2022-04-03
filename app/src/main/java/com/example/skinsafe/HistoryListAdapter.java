@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ListAdapter extends BaseAdapter {
+public class HistoryListAdapter extends BaseAdapter {
     Context context;
     LayoutInflater inflater;
     ArrayList<String> time;
@@ -27,7 +27,7 @@ public class ListAdapter extends BaseAdapter {
     ArrayList<Integer> next;
     ArrayList<Integer> keys;
 
-    public ListAdapter(Context context, ArrayList<Bitmap> image, ArrayList<String> time, ArrayList<float[]> result, ArrayList<Integer> next, ArrayList<Integer> keys) {
+    public HistoryListAdapter(Context context, ArrayList<Bitmap> image, ArrayList<String> time, ArrayList<float[]> result, ArrayList<Integer> next, ArrayList<Integer> keys) {
         this.context = context;
         this.image = image;
         this.time = time;
