@@ -8,7 +8,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "user")
-public class UserModel {
+public class HistoryModel {
 
     //Primary key
     @PrimaryKey(autoGenerate = true)
@@ -23,9 +23,6 @@ public class UserModel {
 
     @ColumnInfo(name = "results")
     private float[] results;
-
-    @ColumnInfo(name = "next")
-    private int next;
 
     public int getKey() {
         return key;
@@ -57,12 +54,5 @@ public class UserModel {
 
     public void setResults(float[] results) {
         this.results = results;
-    }
-
-    public int getNext() {
-        return next;
-    }
-    public void setNext(int next) {
-        this.next = next;
     }
 }

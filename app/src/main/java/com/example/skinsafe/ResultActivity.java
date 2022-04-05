@@ -5,31 +5,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.skinsafe.Database.DatabaseClass;
-import com.example.skinsafe.Database.UserModel;
+import com.example.skinsafe.Database.HistoryDatabaseClass;
+import com.example.skinsafe.Database.HistoryModel;
+import com.example.skinsafe.Database.TrackDatabaseClass;
+import com.example.skinsafe.Database.TrackModel;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +28,7 @@ public class ResultActivity extends AppCompatActivity {
     ImageView photoImage;
     TextView mainDig, title, secondDig0, secondDig1, secondDig2, secondDig3, secondDig4;
     boolean save;
+    int track;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,12 +43,12 @@ public class ResultActivity extends AppCompatActivity {
         secondDig4 = findViewById(R.id.secondDig4);
 
         Intent intent = getIntent();
+        track = intent.getIntExtra("track", -2);
         save = intent.getBooleanExtra("saveOrNot", true);
         float[] output = intent.getFloatArrayExtra("output");
         Bitmap bitMap = (Bitmap) intent.getExtras().get("imageBitmap");
         photoImage.setImageBitmap(bitMap);
         setDiagnoze(output, bitMap);
-
     }
 
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
@@ -146,91 +137,58 @@ public class ResultActivity extends AppCompatActivity {
             }
         });
         if (save){
-//            saveToFile(output, bitMap);
-            saveToDatabase(output, bitMap);
-        }
-
-    }
-
-    private void saveToFile(float[] output, Bitmap bitMap){
-        String name = "his_" + String.valueOf(savedCount()) + ".png";
-        try {
-            FileOutputStream out = openFileOutput(name, MODE_PRIVATE);
-            bitMap.compress(Bitmap.CompressFormat.PNG, 100, out);
-            out.close();
-            List<String> list = new ArrayList<>(readFromFile());
-            String temp = "";
-            for (int i = 0; i < list.size(); i++){
-                temp += list.get(i) + "\n";
+            if (track == -2) {
+                Log.d("LMAO", String.valueOf(track));
+                Log.d("LMAO", "SAVED TO HISTORY");
+                saveToHistoryDatabase(output, bitMap);
+            } else {
+                Log.d("LMAO", String.valueOf(track));
+                Log.d("LMAO", "SAVED TO TRACK");
+                saveToTrackDatabase(output, bitMap);
             }
-            Date currentTime = Calendar.getInstance().getTime();
-            temp += output[0] + "," + output[1] + "," + output[2] + "," + output[3] + "," + output[4] + "," + output[5] + "," + name + "," + currentTime;
-            writeToFile(temp);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
-    private void saveToDatabase(float[] output, Bitmap bitMap){
-        UserModel model = new UserModel();
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+    }
+
+    private void saveToHistoryDatabase(float[] output, Bitmap bitMap){
+        HistoryModel model = new HistoryModel();
         model.setImage(bitMap);
         model.setTime(Calendar.getInstance().getTime().toString());
         model.setResults(output);
+        HistoryDatabaseClass.getDatabase(getApplicationContext()).getDao().insertAllData(model);
+    }
+
+    private void saveToTrackDatabase(float[] output, Bitmap bitMap){
+        TrackModel model = new TrackModel();
+        model.setImage(bitMap);
+        model.setTime(Calendar.getInstance().getTime().toString());
+        model.setResults(output);
+        if (track == -1) {
+            model.setHead(true);
+        } else {
+            model.setHead(false);
+            // TODO update previous node
+        }
         model.setNext(-1);
-        DatabaseClass.getDatabase(getApplicationContext()).getDao().insertAllData(model);
+        model.setName((String) getIntent().getExtras().get("name"));
+        model.setPlace((String) getIntent().getExtras().get("place"));
+        int newId = (int) TrackDatabaseClass.getDatabase(getApplicationContext()).getDao().insertData(model);
+        TrackDatabaseClass.getDatabase(this).getDao().updateTale(newId, findTale(track));
     }
 
-    private void writeToFile(String data) {
-        try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("config_history.txt", MODE_PRIVATE));
-            outputStreamWriter.write(data);
-            outputStreamWriter.close();
+    private int findTale(int id) {
+        if (id == -1) {
+            return -1;
         }
-        catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
+        TrackModel model = TrackDatabaseClass.getDatabase(this).getDao().loadSingle(id);
+        while (model.getNext() != -1) {
+            model = TrackDatabaseClass.getDatabase(this).getDao().loadSingle(model.getNext());
         }
+        return model.getKey();
     }
-
-
-    private List<String> readFromFile() {
-
-        List<String> ret = new ArrayList<>();
-
-        try {
-            InputStream inputStream = openFileInput("config_history.txt");
-
-            if ( inputStream != null ) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String receiveString = "";
-
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
-                    ret.add(receiveString);
-                }
-
-                inputStream.close();
-            }
-        }
-        catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-        }
-
-        return ret;
-    }
-
-    private int savedCount(){
-        File temp = new File(this.getFilesDir().getPath());
-        int c = 0;
-        for (File file: temp.listFiles()){
-            if (file.getName().split("\\.")[0].split("_")[0].equals("his")){
-                c++;  //his_1
-            }
-        }
-        return c;
-    }
-
 }

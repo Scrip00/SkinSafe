@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.skinsafe.Database.DatabaseClass;
+import com.example.skinsafe.Database.HistoryDatabaseClass;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,15 +24,13 @@ public class HistoryListAdapter extends BaseAdapter {
     ArrayList<String> time;
     ArrayList<Bitmap> image;
     ArrayList<float[]> result;
-    ArrayList<Integer> next;
     ArrayList<Integer> keys;
 
-    public HistoryListAdapter(Context context, ArrayList<Bitmap> image, ArrayList<String> time, ArrayList<float[]> result, ArrayList<Integer> next, ArrayList<Integer> keys) {
+    public HistoryListAdapter(Context context, ArrayList<Bitmap> image, ArrayList<String> time, ArrayList<float[]> result, ArrayList<Integer> keys) {
         this.context = context;
         this.image = image;
         this.time = time;
         this.result = result;
-        this.next = next;
         this.keys = keys;
     }
 
@@ -90,11 +88,10 @@ public class HistoryListAdapter extends BaseAdapter {
         deleteView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatabaseClass.getDatabase(context).getDao().deleteData(keys.get(position));
+                HistoryDatabaseClass.getDatabase(context).getDao().deleteData(keys.get(position));
                 image.remove(position);
                 time.remove(position);
                 result.remove(position);
-                next.remove(position);
                 keys.remove(position);
                 notifyDataSetInvalidated();
             }

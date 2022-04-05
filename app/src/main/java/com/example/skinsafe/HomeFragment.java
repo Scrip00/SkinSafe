@@ -123,25 +123,26 @@ public class HomeFragment extends Fragment {
 
     private List<String> readFromFile() {
         List<String> ret = new ArrayList<>();
-        try {
-            InputStream inputStream = getActivity().openFileInput("config_track.txt");
-            if ( inputStream != null ) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String receiveString = "";
-
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
-                    ret.add(receiveString);
-                }
-
-                inputStream.close();
-            }
-        }
-        catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-        }
+        // TODO изменить эту дрочь
+//        try {
+//            InputStream inputStream = getActivity().openFileInput("config_track.txt");
+//            if ( inputStream != null ) {
+//                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+//                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+//                String receiveString = "";
+//
+//                while ( (receiveString = bufferedReader.readLine()) != null ) {
+//                    ret.add(receiveString);
+//                }
+//
+//                inputStream.close();
+//            }
+//        }
+//        catch (FileNotFoundException e) {
+//            Log.e("login activity", "File not found: " + e.toString());
+//        } catch (IOException e) {
+//            Log.e("login activity", "Can not read file: " + e.toString());
+//        }
         return ret;
     }
 }

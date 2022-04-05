@@ -53,6 +53,11 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        if (getIntent().getStringExtra("selectedFragment") != null && getIntent().getStringExtra("selectedFragment").equals("track")) {
+            Fragment selectedFragment = new TrackFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+        }
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
@@ -185,5 +190,10 @@ public class MainActivity extends AppCompatActivity {
             retImg = Bitmap.createBitmap(retImg,(retImg.getWidth() - retImg.getHeight()) / 2, 0, retImg.getHeight(), retImg.getHeight());
         }
         return retImg;
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }

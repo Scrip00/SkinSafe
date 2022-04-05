@@ -50,13 +50,13 @@ public class PickAndChooseActivity extends AppCompatActivity {
     List<RectF> coordinates;
     double scale;
     boolean isOk;
-    int from;
     Bitmap initialImage;
     List<Detection> detectionResultsSaved;
-    int screenWidth, screenHeight;
+    int screenWidth, screenHeight, from, track;
     Button selectBtn, cropBtn;
     RectF savedBox;
     CropImageView cropImageView;
+    String trackPlace, trackName;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -74,6 +74,14 @@ public class PickAndChooseActivity extends AppCompatActivity {
         coordinates = new ArrayList<>();
         Intent intent = getIntent();
         String currentPhotoPath = (String) intent.getExtras().get("filePath");
+        if (intent.getIntExtra("track", -2) != -2) {
+            track = intent.getIntExtra("track", -2);
+            trackPlace = (String) intent.getExtras().get("place");
+            trackName = (String) intent.getExtras().get("name");
+        } else {
+            track = -2;
+        }
+        Log.d("LMAO", String.valueOf(track));
         Bitmap bitMap = BitmapFactory.decodeFile(currentPhotoPath);
         if (intent.getBooleanExtra("rotate", true)) {
             bitMap = rotateImage(bitMap, 90f);
@@ -220,6 +228,9 @@ public class PickAndChooseActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ResultActivity.class);
         intent.putExtra("output", out);
         intent.putExtra("imageBitmap", imageBitmap);
+        intent.putExtra("track", track);
+        intent.putExtra("place", trackPlace);
+        intent.putExtra("name", trackName);
         startActivity(intent);
     }
 

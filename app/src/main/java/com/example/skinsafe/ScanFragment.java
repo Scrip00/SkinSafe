@@ -75,9 +75,6 @@ public class ScanFragment extends Fragment {
         return rootView;
     }
 
-
-
-
     private void openGallery(){
         Intent intent = new Intent(Intent.ACTION_PICK,  MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
@@ -86,16 +83,11 @@ public class ScanFragment extends Fragment {
 
     public void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
-            // Create the File where the photo should go
             File photoFile = null;
             try {
                 photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-            }
-            // Continue only if the File was successfully created
+            } catch (IOException ex) { }
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(getContext(),
                         "com.example.skinsafe.fileprovider",
@@ -106,7 +98,7 @@ public class ScanFragment extends Fragment {
         }
     }
 
-    private File createImageFile() throws IOException {
+    public File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
@@ -148,40 +140,6 @@ public class ScanFragment extends Fragment {
         }
     }
 
-    @SuppressLint({"SetTextI18n", "DefaultLocale"})
-    private void newCalcNN(Bitmap imgBitmap) throws IOException {
-        int width = 200, height = 200;
-        Interpreter tflite;
-        //Bitmap bitmap = BitmapFactory.decodeStream(getAssets().open("ISIC_0000142.jpg"));
-        Bitmap bitmap = imgBitmap.copy(imgBitmap.getConfig(), true);
-        bitmap = cropCenter(bitmap);
-        bitmap = getResizedBitmap(bitmap, width, height);
-        float[][][][] newinp = bitmapToInputArray(bitmap);
-        //['actinic keratosis', 'basal cell carcinoma', 'melanoma', 'nevus', 'seborrheic keratosis', 'squamous cell carcinoma']
-        float[][] output=new float[1][6];
-        try {
-            tflite = new Interpreter(loadModelFile());
-            TensorImage tensorImage = new TensorImage(DataType.FLOAT32);
-            tensorImage.load(bitmap);
-            tflite.run(newinp, output);
-            //textView.setText(String.format("%.3g", output[0][0]) + "  " + String.format("%.3g", output[0][1]) + "  " + String.format("%.3g", output[0][2]) + "  " + String.format("%.3g", output[0][3]) + "  " + String.format("%.3g", output[0][4]) + "  " + String.format("%.3g", output[0][5]));
-            openResultActivity(output, bitmap);
-        } catch (Exception ex){
-            ex.printStackTrace();
-        }
-    }
-
-    private void openResultActivity(float[][] output, Bitmap imageBitmap) {
-        float[] out = new float[6];
-        for (int i = 0; i < 6; i++){
-            out[i] = output[0][i];
-        }
-        Intent intent = new Intent(getActivity(), ResultActivity.class);
-        intent.putExtra("output", out);
-        intent.putExtra("imageBitmap", imageBitmap);
-        startActivity(intent);
-    }
-
     public static float[][][][] bitmapToInputArray(Bitmap oldbitmap) {
         Bitmap bitmap= oldbitmap;
         bitmap = Bitmap.createScaledBitmap(bitmap, 200, 200, true);
@@ -199,14 +157,6 @@ public class ScanFragment extends Fragment {
         return input;
     }
 
-    private MappedByteBuffer loadModelFile() throws IOException {
-        AssetFileDescriptor fileDescriptor = getActivity().getAssets().openFd("degree.tflite");
-        FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor());
-        FileChannel fileChannel=inputStream.getChannel();
-        long startOffset=fileDescriptor.getStartOffset();
-        long declareLength=fileDescriptor.getDeclaredLength();
-        return fileChannel.map(FileChannel.MapMode.READ_ONLY,startOffset,declareLength);
-    }
 
     public static Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
         int width = bm.getWidth();
