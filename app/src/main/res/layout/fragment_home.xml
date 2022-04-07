@@ -20,54 +20,10 @@
         android:textSize="70dp" />
 
     <ImageView
-        android:id="@+id/humanView"
-        android:layout_width="374dp"
-        android:layout_height="559dp"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="120dp" />
-
-    <ImageView
-        android:id="@+id/anterior_torso"
-        android:layout_width="374dp"
-        android:layout_height="559dp"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="120dp" />
-    <ImageView
-        android:id="@+id/head_neck"
-        android:layout_width="374dp"
-        android:layout_height="559dp"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="120dp" />
-    <ImageView
-        android:id="@+id/lateral_torso"
-        android:layout_width="374dp"
-        android:layout_height="559dp"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="100dp" />
-    <ImageView
-        android:id="@+id/lower_extremity"
-        android:layout_width="374dp"
-        android:layout_height="559dp"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="120dp" />
-    <ImageView
-        android:id="@+id/oral_genital"
-        android:layout_width="374dp"
-        android:layout_height="559dp"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="120dp" />
-    <ImageView
-        android:id="@+id/palms_soles"
-        android:layout_width="374dp"
-        android:layout_height="559dp"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="120dp" />
-
-    <ImageView
-        android:id="@+id/upper_extremity"
-        android:layout_width="374dp"
-        android:layout_height="559dp"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="120dp" />
-
+        android:id="@+id/humanSVG"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="30dp"
+        android:src="@drawable/ic_human_svg" />
 </RelativeLayout>

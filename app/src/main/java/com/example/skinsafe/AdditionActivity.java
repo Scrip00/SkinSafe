@@ -383,5 +383,5 @@ public class AdditionActivity extends AppCompatActivity {
                 ActivityOptions.makeCustomAnimation(this, R.anim.slide_in_left, R.anim.slide_out_right);
         startActivity(intent, options.toBundle());
     }
-
+    // TODO исправить баг когда заходишь в лист, удаляешь объект, идёшь обратно, нажимаешь на results и пизда
 }

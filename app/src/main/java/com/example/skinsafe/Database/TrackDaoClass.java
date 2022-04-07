@@ -18,6 +18,9 @@ public interface TrackDaoClass {
     @Query("select * from user")
     List<TrackModel> getAllData();
 
+    @Query("select * from user WHERE head=:head")
+    List<TrackModel> getAllParents(boolean head);
+
     @Query("select * from user WHERE `key`=:key")
     TrackModel loadSingle(int key);
 
