@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FF3700B3"
-    tools:context=".MainActivity">
+    android:background="@color/background_color"
+    tools:context=".MainMenu.MainActivity">
 
     <FrameLayout
         android:id="@+id/fragment_container"
@@ -18,7 +18,7 @@
         app:labelVisibilityMode="labeled"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FF3700B3"
+        android:background="@color/background_color"
         app:menu="@menu/upper_navigation" />
 
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.skinsafe">
+    package="com.skinsafe.skinsafe">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -19,19 +19,19 @@
             android:name=".TrackListActivity"
             android:exported="false" />
         <activity
-            android:name=".PickAndChooseActivity"
+            android:name=".ChooseResultActivity"
             android:exported="false" />
         <activity
-            android:name=".AdditionActivity"
+            android:name=".TrackDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".JustActivity"
+            android:name=".DetectionResultsActivity"
             android:exported="false" />
         <activity
             android:name=".ResultActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".MainMenu.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,7 +46,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.skinsafe.fileprovider"
+            android:authorities="com.skinsafe.skinsafe.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
