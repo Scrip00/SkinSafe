@@ -2,8 +2,11 @@ package com.skinsafe.skinsafe.MainMenu;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -16,9 +19,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
@@ -36,6 +42,7 @@ public class ScanFragment extends Fragment {
     public static final int REQUEST_IMAGE_CAPTURE = 2;
     private View rootView;
     private String currentPhotoPath;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -51,14 +58,35 @@ public class ScanFragment extends Fragment {
         uploadFromFileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openGallery();
+                requestPermissionForGallery(rootView.getContext());
             }
         });
         return rootView;
     }
 
-    private void openGallery(){
-        Intent intent = new Intent(Intent.ACTION_PICK,  MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+    public void requestPermissionForGallery(Context context) {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        } else {
+            openGallery();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        if (requestCode == 1) {
+            if (grantResults.length > 0 &&
+                    grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(rootView.getContext(), "Storage permission is needed to continue", Toast.LENGTH_SHORT).show();
+            } else {
+                openGallery();
+            }
+        }
+    }
+
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
     }
 
@@ -69,7 +97,8 @@ public class ScanFragment extends Fragment {
             File photoFile = null;
             try {
                 photoFile = createImageFile();
-            } catch (IOException ex) { }
+            } catch (IOException ex) {
+            }
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(getContext(),
                         "com.skinsafe.skinsafe.fileprovider",
@@ -123,7 +152,7 @@ public class ScanFragment extends Fragment {
     }
 
     public static float[][][][] bitmapToInputArray(Bitmap oldbitmap) {
-        Bitmap bitmap= oldbitmap;
+        Bitmap bitmap = oldbitmap;
         bitmap = Bitmap.createScaledBitmap(bitmap, 200, 200, true);
         int batchNum = 0;
         float[][][][] input = new float[1][200][200][3];
@@ -155,10 +184,10 @@ public class ScanFragment extends Fragment {
 
     public static Bitmap cropCenter(Bitmap img) {
         Bitmap retImg = img.copy(img.getConfig(), true);
-        if (retImg.getHeight() > retImg.getWidth()){
+        if (retImg.getHeight() > retImg.getWidth()) {
             retImg = Bitmap.createBitmap(retImg, 0, (retImg.getHeight() - retImg.getWidth()) / 2, retImg.getWidth(), retImg.getWidth());
-        } else if (retImg.getHeight() < retImg.getWidth()){
-            retImg = Bitmap.createBitmap(retImg,(retImg.getWidth() - retImg.getHeight()) / 2, 0, retImg.getHeight(), retImg.getHeight());
+        } else if (retImg.getHeight() < retImg.getWidth()) {
+            retImg = Bitmap.createBitmap(retImg, (retImg.getWidth() - retImg.getHeight()) / 2, 0, retImg.getHeight(), retImg.getHeight());
         }
         return retImg;
     }

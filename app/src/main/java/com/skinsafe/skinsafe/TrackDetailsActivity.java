@@ -3,11 +3,15 @@ package com.skinsafe.skinsafe;
 import static com.skinsafe.skinsafe.MainMenu.ScanFragment.PICK_IMAGE;
 import static com.skinsafe.skinsafe.MainMenu.ScanFragment.REQUEST_IMAGE_CAPTURE;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -21,7 +25,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.skinsafe.skinsafe.Adapters.TrackSpinnerAdapter;
@@ -129,7 +135,7 @@ public class TrackDetailsActivity extends AppCompatActivity {
         uploadNewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (checkCorrectness()) openGallery();
+                if (checkCorrectness()) requestPermissionForGallery(getBaseContext());
             }
         });
 
@@ -171,6 +177,28 @@ public class TrackDetailsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+     public void requestPermissionForGallery(Context context) {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        } else {
+            openGallery();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if (grantResults.length > 0 &&
+                    grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Storage permission is needed to continue", Toast.LENGTH_SHORT).show();
+            } else {
+                openGallery();
+            }
+        }
     }
 
     private String generateComparisonText(String sw) {
