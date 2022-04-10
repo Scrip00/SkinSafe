@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FF3700B3"
+    android:background="@color/background_color"
     tools:context=".ResultActivity">
 
     <ImageView
@@ -23,7 +23,7 @@
         android:layout_marginTop="270dp"
         android:fontFamily="@font/roboto_bold"
         android:textAlignment="center"
-        android:textColor="#E6E6E6"
+        android:textColor="@color/header_text_color"
         android:textSize="18sp" />
 
     <TextView
@@ -35,7 +35,7 @@
         android:fontFamily="@font/roboto_bold"
         android:text="It may also be:"
         android:textAlignment="textStart"
-        android:textColor="#E6E6E6"
+        android:textColor="@color/header_text_color"
         android:textSize="25dp" />
 
     <TextView
@@ -46,7 +46,7 @@
         android:layout_marginTop="410dp"
         android:fontFamily="@font/roboto_bold"
         android:textAlignment="textStart"
-        android:textColor="#E6E6E6"
+        android:textColor="@color/regular_text_color"
         android:textSize="15sp" />
 
     <TextView
@@ -57,7 +57,7 @@
         android:layout_marginTop="460dp"
         android:fontFamily="@font/roboto_bold"
         android:textAlignment="textStart"
-        android:textColor="#E6E6E6"
+        android:textColor="@color/regular_text_color"
         android:textSize="15sp" />
 
     <TextView
@@ -68,7 +68,7 @@
         android:layout_marginTop="510dp"
         android:fontFamily="@font/roboto_bold"
         android:textAlignment="textStart"
-        android:textColor="#E6E6E6"
+        android:textColor="@color/regular_text_color"
         android:textSize="15sp" />
 
     <TextView
@@ -79,7 +79,7 @@
         android:layout_marginTop="560dp"
         android:fontFamily="@font/roboto_bold"
         android:textAlignment="textStart"
-        android:textColor="#E6E6E6"
+        android:textColor="@color/regular_text_color"
         android:textSize="15sp" />
 
     <TextView
@@ -90,7 +90,7 @@
         android:layout_marginTop="610dp"
         android:fontFamily="@font/roboto_bold"
         android:textAlignment="textStart"
-        android:textColor="#E6E6E6"
+        android:textColor="@color/regular_text_color"
         android:textSize="15sp" />
 
 </RelativeLayout>

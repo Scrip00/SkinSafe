@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FF3700B3"
+    android:background="@color/background_color"
     tools:context=".ResultActivity">
 
     <ImageView
@@ -45,5 +45,5 @@
         android:layout_marginTop="300dp"
         android:fontFamily="@font/roboto_bold"
         android:text="TextView"
-        android:textColor="#CDCDCD" />
+        android:textColor="@color/regular_text_color" />
 </RelativeLayout>
