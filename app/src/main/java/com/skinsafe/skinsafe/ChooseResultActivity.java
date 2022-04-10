@@ -14,9 +14,9 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -77,10 +77,23 @@ public class ChooseResultActivity extends AppCompatActivity {
         } else {
             track = -2;
         }
-        Log.d("LMAO", String.valueOf(track));
         Bitmap bitMap = BitmapFactory.decodeFile(currentPhotoPath);
-        if (intent.getBooleanExtra("rotate", true)) {
-            bitMap = rotateImage(bitMap, 90f);
+        int orientation = 0;
+        try {
+            ExifInterface exif = new ExifInterface(currentPhotoPath);
+            orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                 bitMap = rotateImage(bitMap, -90f);
+
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                 bitMap = rotateImage(bitMap, 270f);
+
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                bitMap = rotateImage(bitMap, 270f);
         }
         try {
             runObjectDetection(bitMap);

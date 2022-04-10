@@ -6,7 +6,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
+
+
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -139,12 +140,8 @@ public class ResultActivity extends AppCompatActivity {
         });
         if (save){
             if (track == -2) {
-                Log.d("LMAO", String.valueOf(track));
-                Log.d("LMAO", "SAVED TO HISTORY");
                 saveToHistoryDatabase(output, bitMap);
             } else {
-                Log.d("LMAO", String.valueOf(track));
-                Log.d("LMAO", "SAVED TO TRACK");
                 saveToTrackDatabase(output, bitMap);
             }
         }

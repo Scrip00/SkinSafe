@@ -14,7 +14,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -130,8 +129,6 @@ public class ScanFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
             currentPhotoPath = data.getData().getPath();
-            Log.d("LMAO", currentPhotoPath);
-            Log.d("LMAO", String.valueOf(currentPhotoPath.startsWith("/raw/")));
             if (currentPhotoPath.startsWith("/raw/")) {
                 currentPhotoPath = currentPhotoPath.replaceFirst("/raw/", "");
             } else if (currentPhotoPath.startsWith("raw:")) {
@@ -139,14 +136,12 @@ public class ScanFragment extends Fragment {
             }
             Intent intent = new Intent(getActivity(), ChooseResultActivity.class);
             intent.putExtra("filePath", currentPhotoPath);
-            intent.putExtra("rotate", false);
             startActivity(intent);
         }
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Intent intent = new Intent(getActivity(), ChooseResultActivity.class);
             intent.putExtra("filePath", currentPhotoPath);
-            intent.putExtra("rotate", true);
             startActivity(intent);
         }
     }

@@ -11,13 +11,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,7 +22,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -299,9 +295,6 @@ public class TrackDetailsActivity extends AppCompatActivity {
         list.addAll(digMap.keySet());
         Collections.sort(list);
         DecimalFormat df = new DecimalFormat("#.##");
-        for (int i = 0; i < 6; i++) {
-            Log.d("LMAO", String.valueOf(list.get(i)));
-        }
         str += "Probably it's: " + digMap.get(list.get(5)) + "\nThe chance is: " + df.format(list.get(5) * 100) + "%";
         return str;
     }
@@ -358,8 +351,6 @@ public class TrackDetailsActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
             currentPhotoPath = data.getData().getPath();
-            Log.d("LMAO", currentPhotoPath);
-            Log.d("LMAO", String.valueOf(currentPhotoPath.startsWith("/raw/")));
             if (currentPhotoPath.startsWith("/raw/")) {
                 currentPhotoPath = currentPhotoPath.replaceFirst("/raw/", "");
             } else if (currentPhotoPath.startsWith("raw:")) {
@@ -367,7 +358,6 @@ public class TrackDetailsActivity extends AppCompatActivity {
             }
             Intent intent = new Intent(this, ChooseResultActivity.class);
             intent.putExtra("filePath", currentPhotoPath);
-            intent.putExtra("rotate", false);
             intent.putExtra("place", (String) spinner.getSelectedItem());
             intent.putExtra("name", String.valueOf(editTextName.getText()));
             intent.putExtra("track", findTale(id));
@@ -377,7 +367,6 @@ public class TrackDetailsActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Intent intent = new Intent(this, ChooseResultActivity.class);
             intent.putExtra("filePath", currentPhotoPath);
-            intent.putExtra("rotate", true);
             intent.putExtra("place", (String) spinner.getSelectedItem());
             intent.putExtra("name", String.valueOf(editTextName.getText()));
             intent.putExtra("track", findTale(id));
