@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_color"
     tools:context=".ResultActivity">
 
-    <ImageView
-        android:id="@+id/photoImage"
-        android:layout_width="180dp"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/CardView"
+        android:layout_width="140dp"
         android:layout_height="140dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="170dp"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:cardCornerRadius="15dp">
+
+        <ImageView
+            android:id="@+id/photoImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            tools:srcCompat="@tools:sample/avatars" />
+    </androidx.cardview.widget.CardView>
 
     <Spinner
         android:id="@+id/items_spinner"
@@ -28,9 +36,9 @@
         android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="30dp"
-        android:layout_marginEnd="30dp"
         android:layout_alignParentBottom="true"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="30dp"
         android:fontFamily="@font/roboto_bold"
         android:text="Take new picture" />
 
@@ -38,9 +46,9 @@
         android:id="@+id/uploadNewBtn"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_marginStart="30dp"
         android:layout_marginBottom="30dp"
-        android:layout_alignParentBottom="true"
         android:fontFamily="@font/roboto_bold"
         android:text="Upload new photo" />
 

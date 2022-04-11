@@ -7,23 +7,37 @@
     android:background="@color/background_color"
     tools:context=".ResultActivity">
 
-    <ImageView
-        android:id="@+id/imageView1"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/CardView1"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="110dp"
-        tools:src="@tools:sample/avatars" />
+        app:cardCornerRadius="15dp">
 
-    <ImageView
-        android:id="@+id/imageView2"
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:src="@tools:sample/avatars" />
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/CardView2"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_alignParentRight="true"
         android:layout_marginTop="110dp"
         android:layout_marginRight="30dp"
+        app:cardCornerRadius="15dp">
 
-        tools:src="@tools:sample/avatars" />
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:src="@tools:sample/avatars" />
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/textName"
@@ -34,7 +48,7 @@
         android:fontFamily="@font/roboto_bold"
         android:text="TextView"
         android:textAlignment="center"
-        android:textColor="#CDCDCD"
+        android:textColor="@color/human_color"
         android:textSize="23dp" />
 
     <TextView

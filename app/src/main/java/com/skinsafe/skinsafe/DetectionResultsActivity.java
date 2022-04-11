@@ -2,6 +2,7 @@ package com.skinsafe.skinsafe;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -14,6 +15,8 @@ import java.io.IOException;
 public class DetectionResultsActivity extends AppCompatActivity {
     TextView textName, textDescription;
     ImageView imageView1, imageView2;
+
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +28,7 @@ public class DetectionResultsActivity extends AppCompatActivity {
 
         Intent intent = this.getIntent();
         String name = intent.getStringExtra("type");
-        switch (name){
+        switch (name) {
             case "Actinic Keratosis":
                 textName.setText("Actinic Keratosis, may be malignant");
                 textName.setTextColor(Color.YELLOW);

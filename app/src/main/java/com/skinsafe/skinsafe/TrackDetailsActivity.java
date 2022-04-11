@@ -206,8 +206,10 @@ public class TrackDetailsActivity extends AppCompatActivity {
             float[] outputOrig = model.getResults();
             float[] output;
             if (sw.equals("comparison")) {
+                str += "Since previous scan ";
                 output = TrackDatabaseClass.getDatabase(this).getDao().findParent(id).getResults();
             } else if (sw.equals("progress")) {
+                 str += "Since very first scan ";
                 output = TrackDatabaseClass.getDatabase(this).getDao().loadSingle(getHead(id)).getResults();
             } else return "Not supported yet";
             Map<Float, String> digMap = new HashMap<>();
@@ -256,9 +258,9 @@ public class TrackDetailsActivity extends AppCompatActivity {
                 for (Float key : digMapS.keySet()) {
                     if (digMapS.get(key).equals(outputMax)) {
                         if (key >= 0) {
-                            str += "The " + digMapS.get(key) + " became worse by " + df.format(key * 100) + "%";
+                            str += "the " + digMapS.get(key) + " became worse by " + df.format(key * 100) + "%";
                         } else {
-                            str += "The " + digMapS.get(key) + " became better by " + df.format(-key * 100) + "%";
+                            str += "the " + digMapS.get(key) + " became better by " + df.format(-key * 100) + "%";
                         }
                         break;
                     }
@@ -296,6 +298,7 @@ public class TrackDetailsActivity extends AppCompatActivity {
         Collections.sort(list);
         DecimalFormat df = new DecimalFormat("#.##");
         str += "Probably it's: " + digMap.get(list.get(5)) + "\nThe chance is: " + df.format(list.get(5) * 100) + "%";
+        if (model.isHead()) str += "\nThis is your very first scan";
         return str;
     }
 
@@ -402,5 +405,4 @@ public class TrackDetailsActivity extends AppCompatActivity {
                 ActivityOptions.makeCustomAnimation(this, R.anim.slide_in_left, R.anim.slide_out_right);
         startActivity(intent, options.toBundle());
     }
-    // TODO исправить баг когда заходишь в лист, удаляешь объект, идёшь обратно, нажимаешь на results и пизда
 }
