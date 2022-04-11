@@ -29,6 +29,10 @@ public class HistoryListAdapter extends BaseAdapter {
     ArrayList<Integer> keys;
 
     public HistoryListAdapter(Context context, ArrayList<Bitmap> image, ArrayList<String> time, ArrayList<float[]> result, ArrayList<Integer> keys) {
+        Collections.reverse(image);
+        Collections.reverse(time);
+        Collections.reverse(result);
+        Collections.reverse(keys);
         this.context = context;
         this.image = image;
         this.time = time;
@@ -73,7 +77,7 @@ public class HistoryListAdapter extends BaseAdapter {
         List<Float> list = new ArrayList<> ();
         list.addAll(digMap.keySet());
         Collections.sort(list, null);
-        match += "It probably was " + digMap.get(list.get(list.size() - 1)) + "\nClick here to see details";
+        match += "It probably was " + digMap.get(list.get(list.size() - 1)) + "\n\nClick here to see details";
 
         textViewMatch.setText(match);
         textViewDate.setText(time.get(position));

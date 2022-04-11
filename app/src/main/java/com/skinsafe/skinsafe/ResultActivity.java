@@ -22,6 +22,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,7 @@ public class ResultActivity extends AppCompatActivity {
     TextView mainDig, title, secondDig0, secondDig1, secondDig2, secondDig3, secondDig4;
     boolean save;
     int track;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +56,7 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
-    private void setDiagnoze(float[] output, Bitmap bitMap){
+    private void setDiagnoze(float[] output, Bitmap bitMap) {
         Map<Float, String> digMap = new HashMap<>();
         digMap.put(output[0], "Actinic Keratosis");
         digMap.put(output[1], "Basal Cell Carcinoma");
@@ -66,11 +68,11 @@ public class ResultActivity extends AppCompatActivity {
         list.addAll(digMap.keySet());
         Collections.sort(list);
         DecimalFormat df = new DecimalFormat("#.##");
-        for (int i = list.size() - 1; i >= 0; i--){
-            if (i == list.size() - 1){
+        for (int i = list.size() - 1; i >= 0; i--) {
+            if (i == list.size() - 1) {
                 mainDig.setText("Probably it's: " + digMap.get(list.get(i)) + "\nThe chance is: " + df.format(list.get(i) * 100) + "%");
             } else {
-                switch (i){
+                switch (i) {
                     case 4:
                         secondDig0.setText(digMap.get(list.get(i)) + " with chance: " + df.format(list.get(i) * 100) + "%" + "\n");
                         break;
@@ -138,7 +140,7 @@ public class ResultActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        if (save){
+        if (save) {
             if (track == -2) {
                 saveToHistoryDatabase(output, bitMap);
             } else {
@@ -153,18 +155,30 @@ public class ResultActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void saveToHistoryDatabase(float[] output, Bitmap bitMap){
+    private void saveToHistoryDatabase(float[] output, Bitmap bitMap) {
         HistoryModel model = new HistoryModel();
         model.setImage(bitMap);
-        model.setTime(Calendar.getInstance().getTime().toString());
+        String min = "", hour = "";
+        Calendar cal = Calendar.getInstance();
+        if (cal.get(Calendar.MINUTE) < 10) min += "0";
+        if (cal.get(Calendar.HOUR_OF_DAY) < 10) hour += "0";
+        min += String.valueOf(cal.get(Calendar.MINUTE));
+        hour += String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
+        model.setTime(hour + ":" + min + ", " + cal.get(Calendar.MONTH) + "/" + (cal.get(Calendar.DAY_OF_MONTH) + 1) + "/" + cal.get(Calendar.YEAR));
         model.setResults(output);
         HistoryDatabaseClass.getDatabase(getApplicationContext()).getDao().insertAllData(model);
     }
 
-    private void saveToTrackDatabase(float[] output, Bitmap bitMap){
+    private void saveToTrackDatabase(float[] output, Bitmap bitMap) {
         TrackModel model = new TrackModel();
         model.setImage(bitMap);
-        model.setTime(Calendar.getInstance().getTime().toString());
+        String min = "", hour = "";
+        Calendar cal = Calendar.getInstance();
+        if (cal.get(Calendar.MINUTE) < 10) min += "0";
+        if (cal.get(Calendar.HOUR_OF_DAY) < 10) hour += "0";
+        min += String.valueOf(cal.get(Calendar.MINUTE));
+        hour += String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
+        model.setTime(hour + ":" + min + ", " + cal.get(Calendar.MONTH) + "/" + (cal.get(Calendar.DAY_OF_MONTH) + 1) + "/" + cal.get(Calendar.YEAR));
         model.setResults(output);
         if (track == -1) {
             model.setHead(true);

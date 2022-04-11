@@ -36,6 +36,14 @@ public class TrackListAdapter extends BaseAdapter {
     Boolean isTrack;
 
     public TrackListAdapter(Context context, ArrayList<Bitmap> image, ArrayList<String> time, ArrayList<float[]> result, ArrayList<String> place, ArrayList<String> name, ArrayList<Integer> next, ArrayList<Boolean> head, ArrayList<Integer> keys, Boolean isTrack) {
+        Collections.reverse(image);
+        Collections.reverse(time);
+        Collections.reverse(result);
+        Collections.reverse(place);
+        Collections.reverse(name);
+        Collections.reverse(next);
+        Collections.reverse(head);
+        Collections.reverse(keys);
         this.context = context;
         this.image = image;
         this.time = time;
@@ -84,14 +92,13 @@ public class TrackListAdapter extends BaseAdapter {
         List<Float> list = new ArrayList<> ();
         list.addAll(digMap.keySet());
         Collections.sort(list, null);
-        match += "It probably was " + digMap.get(list.get(list.size() - 1)) + "\nClick here to see details";
+        match += "It probably was " + digMap.get(list.get(list.size() - 1)) + "\n\nClick here to see details";
 
         textViewMatch.setText(match);
         textViewDate.setText(time.get(position));
         row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO поменять всё нахуй, относит на ласт скан
                 Intent intent = new Intent(context, TrackDetailsActivity.class);
                 intent.putExtra("ID", keys.get(position));
                 if (isTrack) intent.putExtra("list", true);
@@ -101,7 +108,6 @@ public class TrackListAdapter extends BaseAdapter {
         deleteView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO вот эта дрисня может не работать, она и не работает брааат
                 TrackDaoClass database = TrackDatabaseClass.getDatabase(context.getApplicationContext()).getDao();
                 int curKey = keys.get(position);;
                 if (isTrack) {
