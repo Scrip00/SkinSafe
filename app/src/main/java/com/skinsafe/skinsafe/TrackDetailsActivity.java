@@ -10,6 +10,8 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,10 +24,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.skinsafe.skinsafe.Adapters.TrackSpinnerAdapter;
 import com.skinsafe.skinsafe.Database.TrackDaoClass;
 import com.skinsafe.skinsafe.Database.TrackDatabaseClass;
@@ -52,6 +60,8 @@ public class TrackDetailsActivity extends AppCompatActivity {
     TextView probabilityTextView, comparisonTextView, progressTextView;
     int id;
     String currentPhotoPath;
+    CardView cardView;
+    private InterstitialAd mInterstitialAd;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -69,7 +79,37 @@ public class TrackDetailsActivity extends AppCompatActivity {
         probabilityTextView = findViewById(R.id.probabilityTextView);
         comparisonTextView = findViewById(R.id.comparisonTextView);
         progressTextView = findViewById(R.id.progressTextView);
+        cardView = findViewById(R.id.CardView);
 
+        if (!isNetworkAvailable()) {
+            Toast.makeText(getBaseContext(), "Please, turn on wifi to see the results", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        Double d = Math.random();
+        if (d < 0.25) {
+            AdRequest adRequest = new AdRequest.Builder().build();
+
+            InterstitialAd.load(this, "ca-app-pub-3940256099942544/1033173712", adRequest,
+                    new InterstitialAdLoadCallback() {
+                        @Override
+                        public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                            mInterstitialAd = interstitialAd;
+                            mInterstitialAd.show(TrackDetailsActivity.this);
+                            setupUI();
+                        }
+
+                        @Override
+                        public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                            setupUI();
+                            mInterstitialAd = null;
+                        }
+                    });
+        } else {
+            setupUI();
+        }
+    }
+
+    private void setupUI() {
         ArrayList<String> list = new ArrayList<>(Arrays.asList("Anterior torso", "Head/neck", "Lateral torso", "Lower extremity", "Oral/genital", "Palms/soles", "Posterior torso", "Upper extremity"));
         spinner.setAdapter(new TrackSpinnerAdapter(this, R.layout.custom_spinner, list));
 
@@ -84,6 +124,7 @@ public class TrackDetailsActivity extends AppCompatActivity {
             progressTextView.setText("Do not forget to enter track name and place on your body");
             saveChangesBtn.setVisibility(View.INVISIBLE);
             trackListBtn.setVisibility(View.INVISIBLE);
+            cardView.setVisibility(View.INVISIBLE);
         } else {
             TrackModel model;
             if (!getIntent().getBooleanExtra("list", false)) id = findTale(id);
@@ -175,7 +216,14 @@ public class TrackDetailsActivity extends AppCompatActivity {
         });
     }
 
-     public void requestPermissionForGallery(Context context) {
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public void requestPermissionForGallery(Context context) {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         } else {
@@ -209,7 +257,7 @@ public class TrackDetailsActivity extends AppCompatActivity {
                 str += "Since previous scan ";
                 output = TrackDatabaseClass.getDatabase(this).getDao().findParent(id).getResults();
             } else if (sw.equals("progress")) {
-                 str += "Since very first scan ";
+                str += "Since very first scan ";
                 output = TrackDatabaseClass.getDatabase(this).getDao().loadSingle(getHead(id)).getResults();
             } else return "Not supported yet";
             Map<Float, String> digMap = new HashMap<>();
@@ -299,6 +347,7 @@ public class TrackDetailsActivity extends AppCompatActivity {
         DecimalFormat df = new DecimalFormat("#.##");
         str += "Probably it's: " + digMap.get(list.get(5)) + "\nThe chance is: " + df.format(list.get(5) * 100) + "%";
         if (model.isHead()) str += "\nThis is your very first scan";
+        str += "\nClick here to see details";
         return str;
     }
 
@@ -353,12 +402,8 @@ public class TrackDetailsActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
-            currentPhotoPath = data.getData().getPath();
-            if (currentPhotoPath.startsWith("/raw/")) {
-                currentPhotoPath = currentPhotoPath.replaceFirst("/raw/", "");
-            } else if (currentPhotoPath.startsWith("raw:")) {
-                currentPhotoPath = currentPhotoPath.replaceFirst("raw:", "");
-            }
+            FileUtils utils = new FileUtils(getBaseContext());
+            currentPhotoPath = utils.getPath(data.getData());
             Intent intent = new Intent(this, ChooseResultActivity.class);
             intent.putExtra("filePath", currentPhotoPath);
             intent.putExtra("place", (String) spinner.getSelectedItem());

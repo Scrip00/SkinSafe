@@ -22,12 +22,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import com.skinsafe.skinsafe.ChooseResultActivity;
+import com.skinsafe.skinsafe.FileUtils;
 import com.skinsafe.skinsafe.R;
 
 import java.io.File;
@@ -128,12 +128,8 @@ public class ScanFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
-            currentPhotoPath = data.getData().getPath();
-            if (currentPhotoPath.startsWith("/raw/")) {
-                currentPhotoPath = currentPhotoPath.replaceFirst("/raw/", "");
-            } else if (currentPhotoPath.startsWith("raw:")) {
-                currentPhotoPath = currentPhotoPath.replaceFirst("raw:", "");
-            }
+            FileUtils utils = new FileUtils(rootView.getContext());
+            currentPhotoPath = utils.getPath(data.getData());
             Intent intent = new Intent(getActivity(), ChooseResultActivity.class);
             intent.putExtra("filePath", currentPhotoPath);
             startActivity(intent);

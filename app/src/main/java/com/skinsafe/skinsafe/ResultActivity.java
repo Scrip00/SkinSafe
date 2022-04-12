@@ -1,17 +1,27 @@
 package com.skinsafe.skinsafe;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.skinsafe.skinsafe.Database.HistoryDatabaseClass;
 import com.skinsafe.skinsafe.Database.HistoryModel;
 import com.skinsafe.skinsafe.Database.TrackDatabaseClass;
@@ -32,6 +42,7 @@ public class ResultActivity extends AppCompatActivity {
     TextView mainDig, title, secondDig0, secondDig1, secondDig2, secondDig3, secondDig4;
     boolean save;
     int track;
+    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +63,40 @@ public class ResultActivity extends AppCompatActivity {
         float[] output = intent.getFloatArrayExtra("output");
         Bitmap bitMap = (Bitmap) intent.getExtras().get("imageBitmap");
         photoImage.setImageBitmap(bitMap);
-        setDiagnoze(output, bitMap);
+
+        if (!isNetworkAvailable()) {
+            Toast.makeText(getBaseContext(), "Please, turn on wifi to see the results", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        Double d = Math.random();
+        if (d < 0.25) {
+            AdRequest adRequest = new AdRequest.Builder().build();
+
+            InterstitialAd.load(this, "ca-app-pub-3940256099942544/1033173712", adRequest,
+                    new InterstitialAdLoadCallback() {
+                        @Override
+                        public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                            mInterstitialAd = interstitialAd;
+                            mInterstitialAd.show(ResultActivity.this);
+                            setDiagnoze(output, bitMap);
+                        }
+
+                        @Override
+                        public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                            setDiagnoze(output, bitMap);
+                            mInterstitialAd = null;
+                        }
+                    });
+        } else {
+            setDiagnoze(output, bitMap);
+        }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
