@@ -15,6 +15,8 @@
         <entry key="..\:/Users/Scrip0/AndroidStudioProjects/SkinSafe/app/src/main/res/drawable/ic_human_svg.xml" value="0.13541666666666666" />
         <entry key="..\:/Users/Scrip0/AndroidStudioProjects/SkinSafe/app/src/main/res/drawable/ic_humannn.xml" value="0.10625" />
         <entry key="..\:/Users/Scrip0/AndroidStudioProjects/SkinSafe/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2703125" />
+        <entry key="..\:/Users/Scrip0/AndroidStudioProjects/SkinSafe/app/src/main/res/drawable/ic_logo2.xml" value="0.21574074074074073" />
+        <entry key="..\:/Users/Scrip0/AndroidStudioProjects/SkinSafe/app/src/main/res/drawable/start_splash_anim.xml" value="0.21574074074074073" />
         <entry key="..\:/Users/Scrip0/AndroidStudioProjects/SkinSafe/app/src/main/res/font/roboto_bold.xml" value="0.19114583333333332" />
         <entry key="..\:/Users/Scrip0/AndroidStudioProjects/SkinSafe/app/src/main/res/layout/activity_addition.xml" value="0.15729166666666666" />
         <entry key="..\:/Users/Scrip0/AndroidStudioProjects/SkinSafe/app/src/main/res/layout/activity_choose_result.xml" value="0.11822916666666666" />
@@ -33,6 +35,7 @@
         <entry key="..\:/Users/Scrip0/AndroidStudioProjects/SkinSafe/app/src/main/res/layout/fragment_scan.xml" value="0.2" />
         <entry key="..\:/Users/Scrip0/AndroidStudioProjects/SkinSafe/app/src/main/res/layout/fragment_track.xml" value="0.2" />
         <entry key="..\:/Users/Scrip0/AndroidStudioProjects/SkinSafe/app/src/main/res/layout/history_list.xml" value="0.4" />
+        <entry key="..\:/Users/Scrip0/AndroidStudioProjects/SkinSafe/app/src/main/res/layout/layout_start_splash.xml" value="0.16530797101449277" />
         <entry key="..\:/Users/Scrip0/AndroidStudioProjects/SkinSafe/app/src/main/res/layout/simple_spinner_dropdown_item.xml" value="0.11822916666666666" />
         <entry key="..\:/Users/Scrip0/AndroidStudioProjects/SkinSafe/app/src/main/res/layout/track_list.xml" value="0.4" />
         <entry key="..\:/Users/Scrip0/AndroidStudioProjects/SkinSafe/app/src/main/res/menu/upper_navigation.xml" value="0.2" />

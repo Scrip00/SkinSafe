@@ -38,10 +38,10 @@ import java.util.List;
 import java.util.Map;
 
 public class ResultActivity extends AppCompatActivity {
-    ImageView photoImage;
-    TextView mainDig, title, secondDig0, secondDig1, secondDig2, secondDig3, secondDig4;
-    boolean save;
-    int track;
+    private ImageView photoImage;
+    private TextView mainDig, title, secondDig0, secondDig1, secondDig2, secondDig3, secondDig4;
+    private boolean save;
+    private int track;
     private InterstitialAd mInterstitialAd;
 
     @Override
@@ -72,7 +72,7 @@ public class ResultActivity extends AppCompatActivity {
         if (d < 0.25) {
             AdRequest adRequest = new AdRequest.Builder().build();
 
-            InterstitialAd.load(this, "ca-app-pub-3940256099942544/1033173712", adRequest,
+            InterstitialAd.load(this, "", adRequest,
                     new InterstitialAdLoadCallback() {
                         @Override
                         public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
