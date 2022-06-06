@@ -19,11 +19,6 @@ import com.skinsafe.skinsafe.R;
 import java.util.ArrayList;
 
 public class HistoryFragment extends Fragment {
-    ArrayList<String> time;
-    ArrayList<Bitmap> image;
-    ArrayList<float[]> results;
-    ArrayList<Integer> keys;
-    ListView listView;
 
     @Nullable
     @Override
@@ -32,10 +27,10 @@ public class HistoryFragment extends Fragment {
 
         ArrayList<HistoryModel> modelList = (ArrayList<HistoryModel>) HistoryDatabaseClass.getDatabase(getContext().getApplicationContext()).getDao().getAllData();
 
-        time = new ArrayList<>();
-        image = new ArrayList<>();
-        results = new ArrayList<>();
-        keys = new ArrayList<>();
+        ArrayList<String> time = new ArrayList<>();
+        ArrayList<Bitmap> image = new ArrayList<>();
+        ArrayList<float[]> results = new ArrayList<>();
+        ArrayList<Integer> keys = new ArrayList<>();
 
         for (HistoryModel model: modelList) {
             time.add(model.getTime());
@@ -45,7 +40,7 @@ public class HistoryFragment extends Fragment {
         }
 
         View rootView = inflater.inflate(R.layout.fragment_history, container, false);
-        listView = rootView.findViewById(R.id.list_1);
+        ListView listView = rootView.findViewById(R.id.list_1);
         listView.setAdapter(new HistoryListAdapter(getContext(), image, time, results, keys));
         return rootView;
     }

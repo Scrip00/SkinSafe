@@ -21,12 +21,11 @@ import java.util.List;
 import java.util.Map;
 
 public class HistoryListAdapter extends BaseAdapter {
-    Context context;
-    LayoutInflater inflater;
-    ArrayList<String> time;
-    ArrayList<Bitmap> image;
-    ArrayList<float[]> result;
-    ArrayList<Integer> keys;
+    private final Context context;
+    private final ArrayList<String> time;
+    private final ArrayList<Bitmap> image;
+    private final ArrayList<float[]> result;
+    private final ArrayList<Integer> keys;
 
     public HistoryListAdapter(Context context, ArrayList<Bitmap> image, ArrayList<String> time, ArrayList<float[]> result, ArrayList<Integer> keys) {
         Collections.reverse(image);
@@ -56,7 +55,7 @@ public class HistoryListAdapter extends BaseAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(R.layout.history_list, parent, false);
         TextView textViewMatch, textViewDate;
         ImageView imgView, deleteView;

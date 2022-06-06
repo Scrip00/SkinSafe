@@ -53,14 +53,14 @@ import java.util.List;
 import java.util.Map;
 
 public class TrackDetailsActivity extends AppCompatActivity {
-    Spinner spinner;
-    Button takeNewBtn, uploadNewBtn, saveChangesBtn, trackListBtn;
-    EditText editTextName;
-    ImageView photoImage;
-    TextView probabilityTextView, comparisonTextView, progressTextView;
-    int id;
-    String currentPhotoPath;
-    CardView cardView;
+    private Spinner spinner;
+    private Button takeNewBtn, uploadNewBtn, saveChangesBtn, trackListBtn;
+    private EditText editTextName;
+    private ImageView photoImage;
+    private TextView probabilityTextView, comparisonTextView, progressTextView;
+    private int id;
+    private String currentPhotoPath;
+    private CardView cardView;
     private InterstitialAd mInterstitialAd;
 
     @SuppressLint("SetTextI18n")

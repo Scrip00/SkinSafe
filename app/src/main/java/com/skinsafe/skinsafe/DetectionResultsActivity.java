@@ -13,18 +13,16 @@ import android.widget.TextView;
 import java.io.IOException;
 
 public class DetectionResultsActivity extends AppCompatActivity {
-    TextView textName, textDescription;
-    ImageView imageView1, imageView2;
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detection_results);
-        textName = findViewById(R.id.textName);
-        textDescription = findViewById(R.id.textDescription);
-        imageView1 = findViewById(R.id.imageView1);
-        imageView2 = findViewById(R.id.imageView2);
+        TextView textName = findViewById(R.id.textName);
+        TextView textDescription = findViewById(R.id.textDescription);
+        ImageView imageView1 = findViewById(R.id.imageView1);
+        ImageView imageView2 = findViewById(R.id.imageView2);
 
         Intent intent = this.getIntent();
         String name = intent.getStringExtra("type");

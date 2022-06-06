@@ -14,16 +14,6 @@ import com.skinsafe.skinsafe.Adapters.TrackListAdapter;
 import java.util.ArrayList;
 
 public class TrackListActivity extends AppCompatActivity {
-    ArrayList<Bitmap> image;
-    ArrayList<String> time;
-    ArrayList<float[]> results;
-    ArrayList<String> place;
-    ArrayList<String> name;
-    ArrayList<Integer> next;
-    ArrayList<Boolean> head;
-    ArrayList<Integer> keys;
-    ListView listView;
-    int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,16 +21,16 @@ public class TrackListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_track_list);
         ArrayList<TrackModel> modelList = new ArrayList<>();
 
-        image = new ArrayList<>();
-        time = new ArrayList<>();
-        results = new ArrayList<>();
-        place = new ArrayList<>();
-        name = new ArrayList<>();
-        next = new ArrayList<>();
-        head = new ArrayList<>();
-        keys = new ArrayList<>();
+        ArrayList<Bitmap> image = new ArrayList<>();
+        ArrayList<String> time = new ArrayList<>();
+        ArrayList<float[]> results = new ArrayList<>();
+        ArrayList<String> place = new ArrayList<>();
+        ArrayList<String> name = new ArrayList<>();
+        ArrayList<Integer> next = new ArrayList<>();
+        ArrayList<Boolean> head = new ArrayList<>();
+        ArrayList<Integer> keys = new ArrayList<>();
 
-        id = getIntent().getIntExtra("ID", -1);
+        int id = getIntent().getIntExtra("ID", -1);
 
         id = getHead(id);
         TrackDaoClass dao = TrackDatabaseClass.getDatabase(this).getDao();
@@ -62,7 +52,7 @@ public class TrackListActivity extends AppCompatActivity {
             keys.add(trackModel.getKey());
         }
 
-        listView = findViewById(R.id.trackActivityList);
+        ListView listView = findViewById(R.id.trackActivityList);
         listView.setAdapter(new TrackListAdapter(this, image, time, results, place, name, next, head, keys, true));
     }
 

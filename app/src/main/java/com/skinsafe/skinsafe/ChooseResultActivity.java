@@ -43,17 +43,17 @@ import java.util.List;
 
 
 public class ChooseResultActivity extends AppCompatActivity {
-    ImageView detectionResult;
-    List<RectF> coordinates;
-    double scale;
-    boolean isOk;
-    Bitmap initialImage;
-    List<Detection> detectionResultsSaved;
-    int screenWidth, screenHeight, from, track;
-    Button selectBtn, cropBtn;
-    RectF savedBox;
-    CropImageView cropImageView;
-    String trackPlace, trackName;
+    private ImageView detectionResult;
+    private List<RectF> coordinates;
+    private double scale;
+    private boolean isOk;
+    private Bitmap initialImage;
+    private List<Detection> detectionResultsSaved;
+    private int screenWidth, screenHeight, from, track;
+    private Button cropBtn;
+    private RectF savedBox;
+    private CropImageView cropImageView;
+    private String trackPlace, trackName;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -62,7 +62,7 @@ public class ChooseResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_choose_result);
 
         detectionResult = findViewById(R.id.detectionResult);
-        selectBtn = findViewById(R.id.selectBtn);
+        Button selectBtn = findViewById(R.id.selectBtn);
         cropBtn = findViewById(R.id.cropBtn);
         cropImageView = findViewById(R.id.cropImageView);
         cropImageView.setVisibility(View.INVISIBLE);

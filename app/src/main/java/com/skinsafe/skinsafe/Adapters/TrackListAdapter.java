@@ -23,17 +23,16 @@ import java.util.List;
 import java.util.Map;
 
 public class TrackListAdapter extends BaseAdapter {
-    Context context;
-    LayoutInflater inflater;
-    ArrayList<Bitmap> image;
-    ArrayList<String> time;
-    ArrayList<float[]> result;
-    ArrayList<String> place;
-    ArrayList<String> name;
-    ArrayList<Integer> next;
-    ArrayList<Boolean> head;
-    ArrayList<Integer> keys;
-    Boolean isTrack;
+    private final Context context;
+    private final ArrayList<Bitmap> image;
+    private final ArrayList<String> time;
+    private final ArrayList<float[]> result;
+    private final ArrayList<String> place;
+    private final ArrayList<String> name;
+    private final ArrayList<Integer> next;
+    private final ArrayList<Boolean> head;
+    private final ArrayList<Integer> keys;
+    private final Boolean isTrack;
 
     public TrackListAdapter(Context context, ArrayList<Bitmap> image, ArrayList<String> time, ArrayList<float[]> result, ArrayList<String> place, ArrayList<String> name, ArrayList<Integer> next, ArrayList<Boolean> head, ArrayList<Integer> keys, Boolean isTrack) {
         Collections.reverse(image);
@@ -71,7 +70,7 @@ public class TrackListAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(R.layout.history_list, parent, false);
         TextView textViewMatch, textViewDate;
         ImageView imgView, deleteView;

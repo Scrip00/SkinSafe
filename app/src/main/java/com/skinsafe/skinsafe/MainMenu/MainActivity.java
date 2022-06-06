@@ -13,15 +13,13 @@ import com.skinsafe.skinsafe.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    private BottomNavigationView upperNav;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
 
-        upperNav = findViewById(R.id.upper_navigation);
+        BottomNavigationView upperNav = findViewById(R.id.upper_navigation);
         upperNav.setOnItemSelectedListener(navListener);
         Intent intent = getIntent();
 

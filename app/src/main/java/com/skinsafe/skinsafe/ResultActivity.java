@@ -38,8 +38,12 @@ import java.util.List;
 import java.util.Map;
 
 public class ResultActivity extends AppCompatActivity {
-    private ImageView photoImage;
-    private TextView mainDig, title, secondDig0, secondDig1, secondDig2, secondDig3, secondDig4;
+    private TextView mainDig;
+    private TextView secondDig0;
+    private TextView secondDig1;
+    private TextView secondDig2;
+    private TextView secondDig3;
+    private TextView secondDig4;
     private boolean save;
     private int track;
     private InterstitialAd mInterstitialAd;
@@ -48,9 +52,9 @@ public class ResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
-        photoImage = findViewById(R.id.photoImage);
+        ImageView photoImage = findViewById(R.id.photoImage);
         mainDig = findViewById(R.id.mainDig);
-        title = findViewById(R.id.title);
+        TextView title = findViewById(R.id.title);
         secondDig0 = findViewById(R.id.secondDig0);
         secondDig1 = findViewById(R.id.secondDig1);
         secondDig2 = findViewById(R.id.secondDig2);

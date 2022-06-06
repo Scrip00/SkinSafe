@@ -22,35 +22,24 @@ import com.skinsafe.skinsafe.Adapters.TrackListAdapter;
 import java.util.ArrayList;
 
 public class TrackFragment extends Fragment {
-    ArrayList<Bitmap> image;
-    ArrayList<String> time;
-    ArrayList<float[]> results;
-    ArrayList<String> place;
-    ArrayList<String> name;
-    ArrayList<Integer> next;
-    ArrayList<Boolean> head;
-    ArrayList<Integer> keys;
-    ListView listView;
-    Button createNewTrack;
-    View rootView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_track, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_track, container, false);
 
-        createNewTrack = rootView.findViewById(R.id.createNewTrack);
+        Button createNewTrack = rootView.findViewById(R.id.createNewTrack);
 
         ArrayList<TrackModel> modelList = (ArrayList<TrackModel>) TrackDatabaseClass.getDatabase(getContext().getApplicationContext()).getDao().getAllData();
 
-        image = new ArrayList<>();
-        time = new ArrayList<>();
-        results = new ArrayList<>();
-        place = new ArrayList<>();
-        name = new ArrayList<>();
-        next = new ArrayList<>();
-        head = new ArrayList<>();
-        keys = new ArrayList<>();
+        ArrayList<Bitmap> image = new ArrayList<>();
+        ArrayList<String> time = new ArrayList<>();
+        ArrayList<float[]> results = new ArrayList<>();
+        ArrayList<String> place = new ArrayList<>();
+        ArrayList<String> name = new ArrayList<>();
+        ArrayList<Integer> next = new ArrayList<>();
+        ArrayList<Boolean> head = new ArrayList<>();
+        ArrayList<Integer> keys = new ArrayList<>();
 
         for (TrackModel model: modelList) {
             if (model.isHead()) {
@@ -65,7 +54,7 @@ public class TrackFragment extends Fragment {
             }
         }
 
-        listView = rootView.findViewById(R.id.list_2);
+        ListView listView = rootView.findViewById(R.id.list_2);
         listView.setAdapter(new TrackListAdapter(getContext(), image, time, results, place, name, next, head, keys, false));
 
         createNewTrack.setOnClickListener(new View.OnClickListener() {

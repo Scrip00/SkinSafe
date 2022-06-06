@@ -28,9 +28,8 @@ import java.util.List;
 import java.util.Set;
 
 public class HomeFragment extends Fragment {
-    ImageView humanSVG;
-    View rootView;
-    TextView appName;
+    private ImageView humanSVG;
+    private View rootView;
 
     @Nullable
     @Override
@@ -40,7 +39,7 @@ public class HomeFragment extends Fragment {
         deleteRecursive(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES));
 
         humanSVG = rootView.findViewById(R.id.humanSVG);
-        appName = rootView.findViewById(R.id.appNameTextView);
+        TextView appName = rootView.findViewById(R.id.appNameTextView);
 
         Shader shader = new LinearGradient(0, 0, 0, appName.getLineHeight() * 1.10f,
                 Color.parseColor("#CC3F0C"), Color.parseColor("#EB7B52"), Shader.TileMode.REPEAT);

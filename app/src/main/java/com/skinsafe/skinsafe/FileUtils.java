@@ -20,7 +20,7 @@ import java.io.InputStream;
 public class FileUtils {
     private static Uri contentUri = null;
 
-    Context context;
+    private final Context context;
 
     public FileUtils(Context context) {
         this.context = context;

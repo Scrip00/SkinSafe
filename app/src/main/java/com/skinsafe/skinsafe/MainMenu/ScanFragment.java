@@ -36,7 +36,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ScanFragment extends Fragment {
-    private Button takePicBtn, uploadFromFileBtn;
     public static final int PICK_IMAGE = 1;
     public static final int REQUEST_IMAGE_CAPTURE = 2;
     private View rootView;
@@ -46,8 +45,8 @@ public class ScanFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_scan, container, false);
-        takePicBtn = rootView.findViewById(R.id.takePicBtn);
-        uploadFromFileBtn = rootView.findViewById(R.id.uploadFromFileBtn);
+        Button takePicBtn = rootView.findViewById(R.id.takePicBtn);
+        Button uploadFromFileBtn = rootView.findViewById(R.id.uploadFromFileBtn);
         takePicBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
