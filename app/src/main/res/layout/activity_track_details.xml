@@ -7,119 +7,136 @@
     android:background="@color/background_color"
     tools:context=".ResultActivity">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/CardView"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="170dp"
-        app:cardCornerRadius="15dp">
-
-        <ImageView
-            android:id="@+id/photoImage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            tools:srcCompat="@tools:sample/avatars" />
-    </androidx.cardview.widget.CardView>
-
-    <Spinner
-        android:id="@+id/items_spinner"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="match_parent"
         android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="90dp"
-        android:scrollbarSize="10dp" />
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:gravity="center"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/takeNewBtn"
-        android:layout_width="160dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="30dp"
-        android:fontFamily="@font/roboto_bold"
-        android:text="Take new picture" />
+        <EditText
+            android:id="@+id/editTextName"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:ems="10"
+            android:fontFamily="@font/roboto_bold"
+            android:inputType="textPersonName"
+            android:shadowColor="@color/background_color"
+            android:textAlignment="center"
+            android:textColor="@color/header_text_color"
+            android:textColorHighlight="@color/regular_text_color"
+            android:textColorLink="@color/background_color"
+            android:textSize="20sp"
+            tools:text="Type preferrable name" />
 
-    <Button
-        android:id="@+id/uploadNewBtn"
-        android:layout_width="160dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="30dp"
-        android:layout_marginBottom="30dp"
-        android:fontFamily="@font/roboto_bold"
-        android:text="Upload new photo" />
+        <Spinner
+            android:id="@+id/items_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:scrollbarSize="10dp" />
 
-    <Button
-        android:id="@+id/saveChangesBtn"
-        android:layout_width="160dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginHorizontal="100dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginBottom="110dp"
-        android:fontFamily="@font/roboto_bold"
-        android:text="Save changes" />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/CardView"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            app:cardCornerRadius="15dp">
 
-    <Button
-        android:id="@+id/trackListBtn"
-        android:layout_width="160dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginHorizontal="100dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="110dp"
-        android:fontFamily="@font/roboto_bold"
-        android:text="Track list" />
+            <ImageView
+                android:id="@+id/photoImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
 
-    <EditText
-        android:id="@+id/editTextName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:fontFamily="@font/roboto_bold"
-        android:inputType="textPersonName"
-        android:shadowColor="@color/background_color"
-        android:textAlignment="center"
-        android:textColor="@color/header_text_color"
-        android:textColorHighlight="@color/regular_text_color"
-        android:textColorLink="@color/background_color"
-        android:textSize="20sp"
-        tools:text="Type preferrable name" />
+                android:layout_centerHorizontal="true"
+                tools:srcCompat="@tools:sample/avatars" />
+        </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/probabilityTextView"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginTop="320dp"
-        android:fontFamily="@font/roboto_bold"
-        android:textColor="@color/regular_text_color"
-        android:textSize="14sp" />
+        <TextView
+            android:id="@+id/probabilityTextView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/roboto_bold"
+            android:textColor="@color/regular_text_color"
+            android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/comparisonTextView"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginTop="410dp"
-        android:fontFamily="@font/roboto_bold"
-        android:textColor="@color/regular_text_color"
-        android:textSize="14sp" />
+        <TextView
+            android:id="@+id/comparisonTextView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/roboto_bold"
+            android:textColor="@color/regular_text_color"
+            android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/progressTextView"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginTop="500dp"
-        android:fontFamily="@font/roboto_bold"
-        android:textColor="@color/regular_text_color"
-        android:textSize="14sp" />
+        <TextView
+            android:id="@+id/progressTextView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/roboto_bold"
+            android:textColor="@color/regular_text_color"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="15dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/saveChangesBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto_bold"
+                android:text="Save changes" />
+
+            <Button
+                android:id="@+id/trackListBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+
+                android:fontFamily="@font/roboto_bold"
+                android:text="Track list" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="15dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/uploadNewBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto_bold"
+                android:text="Upload new photo" />
+
+            <Button
+                android:id="@+id/takeNewBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto_bold"
+                android:text="Take new picture" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>

@@ -12,7 +12,7 @@ import java.util.List;
 public interface HistoryDaoClass {
 
     @Insert
-    void insertAllData(HistoryModel model);
+    void insertData(HistoryModel model);
 
     //Select All Data
     @Query("select * from  user")

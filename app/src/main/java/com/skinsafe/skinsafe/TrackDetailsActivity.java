@@ -9,13 +9,16 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +35,9 @@ import androidx.core.content.FileProvider;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.skinsafe.skinsafe.Adapters.TrackSpinnerAdapter;
@@ -61,7 +67,6 @@ public class TrackDetailsActivity extends AppCompatActivity {
     private int id;
     private String currentPhotoPath;
     private CardView cardView;
-    private InterstitialAd mInterstitialAd;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -80,32 +85,49 @@ public class TrackDetailsActivity extends AppCompatActivity {
         comparisonTextView = findViewById(R.id.comparisonTextView);
         progressTextView = findViewById(R.id.progressTextView);
         cardView = findViewById(R.id.CardView);
+        loadAd(this);
+        setupUI();
+    }
 
-        if (!isNetworkAvailable()) {
-            Toast.makeText(getBaseContext(), "Please, turn on wifi to see the results", Toast.LENGTH_SHORT).show();
-            finish();
-        }
-        Double d = Math.random();
-        if (d < 0.25) {
-            AdRequest adRequest = new AdRequest.Builder().build();
+    public static void loadAd(Activity activity) {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity.getBaseContext());
+        int numAds = sharedPrefs.getInt("Ads", 0);
+        int maxAds = 7;
+        if (numAds >= maxAds) {
+            if (!isNetworkAvailable(activity)) {
+                Toast.makeText(activity.getBaseContext(), "Please, turn on wifi to see the results", Toast.LENGTH_SHORT).show();
+                activity.finish();
+            } else {
+                MobileAds.initialize(activity.getBaseContext(), new OnInitializationCompleteListener() {
+                    @Override
+                    public void onInitializationComplete(InitializationStatus initializationStatus) {
+                    }
+                });
+                AdRequest adRequest = new AdRequest.Builder().build();
 
-            InterstitialAd.load(this, "", adRequest,
-                    new InterstitialAdLoadCallback() {
-                        @Override
-                        public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                            mInterstitialAd = interstitialAd;
-                            mInterstitialAd.show(TrackDetailsActivity.this);
-                            setupUI();
-                        }
+                InterstitialAd.load(activity.getBaseContext(), "", adRequest,
+                        new InterstitialAdLoadCallback() {
+                            @Override
+                            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                                // The mInterstitialAd reference will be null until
+                                // an ad is loaded.
+                                interstitialAd.show(activity);
+                                SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
+                                sharedPrefsEditor.putInt("Ads", 0);
+                                sharedPrefsEditor.apply();
+                            }
 
-                        @Override
-                        public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                            setupUI();
-                            mInterstitialAd = null;
-                        }
-                    });
+                            @Override
+                            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                                // Handle the error
+                                Log.d("Failed", String.valueOf(loadAdError));
+                            }
+                        });
+            }
         } else {
-            setupUI();
+            SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
+            sharedPrefsEditor.putInt("Ads", numAds + 1);
+            sharedPrefsEditor.apply();
         }
     }
 
@@ -216,9 +238,9 @@ public class TrackDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private boolean isNetworkAvailable() {
+    private static boolean isNetworkAvailable(Activity activity) {
         ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }

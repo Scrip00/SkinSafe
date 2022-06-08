@@ -1,27 +1,20 @@
 package com.skinsafe.skinsafe;
 
+import static com.skinsafe.skinsafe.TrackDetailsActivity.loadAd;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 
 
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.interstitial.InterstitialAd;
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.skinsafe.skinsafe.Database.HistoryDatabaseClass;
 import com.skinsafe.skinsafe.Database.HistoryModel;
 import com.skinsafe.skinsafe.Database.TrackDatabaseClass;
@@ -32,12 +25,13 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ResultActivity extends AppCompatActivity {
+    private final String SAVE_INSTANCE = "save_instance";
+
     private TextView mainDig;
     private TextView secondDig0;
     private TextView secondDig1;
@@ -46,7 +40,6 @@ public class ResultActivity extends AppCompatActivity {
     private TextView secondDig4;
     private boolean save;
     private int track;
-    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +47,6 @@ public class ResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_result);
         ImageView photoImage = findViewById(R.id.photoImage);
         mainDig = findViewById(R.id.mainDig);
-        TextView title = findViewById(R.id.title);
         secondDig0 = findViewById(R.id.secondDig0);
         secondDig1 = findViewById(R.id.secondDig1);
         secondDig2 = findViewById(R.id.secondDig2);
@@ -64,43 +56,14 @@ public class ResultActivity extends AppCompatActivity {
         Intent intent = getIntent();
         track = intent.getIntExtra("track", -2);
         save = intent.getBooleanExtra("saveOrNot", true);
+        if (savedInstanceState != null && !savedInstanceState.getBoolean(SAVE_INSTANCE, false))
+            save = false;
         float[] output = intent.getFloatArrayExtra("output");
         Bitmap bitMap = (Bitmap) intent.getExtras().get("imageBitmap");
         photoImage.setImageBitmap(bitMap);
 
-        if (!isNetworkAvailable()) {
-            Toast.makeText(getBaseContext(), "Please, turn on wifi to see the results", Toast.LENGTH_SHORT).show();
-            finish();
-        }
-        Double d = Math.random();
-        if (d < 0.25) {
-            AdRequest adRequest = new AdRequest.Builder().build();
-
-            InterstitialAd.load(this, "", adRequest,
-                    new InterstitialAdLoadCallback() {
-                        @Override
-                        public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                            mInterstitialAd = interstitialAd;
-                            mInterstitialAd.show(ResultActivity.this);
-                            setDiagnoze(output, bitMap);
-                        }
-
-                        @Override
-                        public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                            setDiagnoze(output, bitMap);
-                            mInterstitialAd = null;
-                        }
-                    });
-        } else {
-            setDiagnoze(output, bitMap);
-        }
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        loadAd(this);
+        setDiagnoze(output, bitMap);
     }
 
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
@@ -140,54 +103,13 @@ public class ResultActivity extends AppCompatActivity {
             }
         }
 
-        mainDig.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ResultActivity.this, DetectionResultsActivity.class);
-                intent.putExtra("type", digMap.get(list.get(5)));
-                startActivity(intent);
-            }
-        });
-        secondDig0.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ResultActivity.this, DetectionResultsActivity.class);
-                intent.putExtra("type", digMap.get(list.get(4)));
-                startActivity(intent);
-            }
-        });
-        secondDig1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ResultActivity.this, DetectionResultsActivity.class);
-                intent.putExtra("type", digMap.get(list.get(3)));
-                startActivity(intent);
-            }
-        });
-        secondDig2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ResultActivity.this, DetectionResultsActivity.class);
-                intent.putExtra("type", digMap.get(list.get(2)));
-                startActivity(intent);
-            }
-        });
-        secondDig3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ResultActivity.this, DetectionResultsActivity.class);
-                intent.putExtra("type", digMap.get(list.get(1)));
-                startActivity(intent);
-            }
-        });
-        secondDig4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ResultActivity.this, DetectionResultsActivity.class);
-                intent.putExtra("type", digMap.get(list.get(0)));
-                startActivity(intent);
-            }
-        });
+        mainDig.setOnClickListener(new digOnClickListener(digMap.get(list.get(5))));
+        secondDig0.setOnClickListener(new digOnClickListener(digMap.get(list.get(4))));
+        secondDig1.setOnClickListener(new digOnClickListener(digMap.get(list.get(3))));
+        secondDig2.setOnClickListener(new digOnClickListener(digMap.get(list.get(2))));
+        secondDig3.setOnClickListener(new digOnClickListener(digMap.get(list.get(1))));
+        secondDig4.setOnClickListener(new digOnClickListener(digMap.get(list.get(0))));
+
         if (save) {
             if (track == -2) {
                 saveToHistoryDatabase(output, bitMap);
@@ -214,7 +136,7 @@ public class ResultActivity extends AppCompatActivity {
         hour += String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
         model.setTime(hour + ":" + min + ", " + cal.get(Calendar.MONTH) + "/" + (cal.get(Calendar.DAY_OF_MONTH) + 1) + "/" + cal.get(Calendar.YEAR));
         model.setResults(output);
-        HistoryDatabaseClass.getDatabase(getApplicationContext()).getDao().insertAllData(model);
+        HistoryDatabaseClass.getDatabase(getApplicationContext()).getDao().insertData(model);
     }
 
     private void saveToTrackDatabase(float[] output, Bitmap bitMap) {
@@ -249,5 +171,26 @@ public class ResultActivity extends AppCompatActivity {
             model = TrackDatabaseClass.getDatabase(this).getDao().loadSingle(model.getNext());
         }
         return model.getKey();
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        savedInstanceState.putBoolean(SAVE_INSTANCE, false);
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    private class digOnClickListener implements View.OnClickListener {
+        private final String name;
+
+        public digOnClickListener(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(ResultActivity.this, DetectionResultsActivity.class);
+            intent.putExtra("type", name);
+            startActivity(intent);
+        }
     }
 }

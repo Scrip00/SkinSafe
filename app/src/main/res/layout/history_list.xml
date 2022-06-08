@@ -17,7 +17,7 @@
         android:fontFamily="@font/roboto_bold"
         android:text="Sample Text"
         android:textColor="@color/header_text_color"
-        android:textSize="20sp"
+        android:textSize="17sp"
         tools:ignore="HardcodedText" />
 
     <TextView
@@ -42,7 +42,7 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         app:cardCornerRadius="60dp"
-        android:layout_marginEnd="20dp">
+        android:layout_marginEnd="30dp">
 
         <ImageView
             android:id="@+id/imgViewShow"
