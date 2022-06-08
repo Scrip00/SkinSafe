@@ -81,17 +81,18 @@ public class TrackListAdapter extends BaseAdapter {
         imgView.setImageBitmap(image.get(position));
 
         String match = "";
-        Map<Float, String> digMap = new HashMap<> ();
+        if (!isTrack) match += "\"" + name.get(position) + "\"\n";
+        Map<Float, String> digMap = new HashMap<>();
         digMap.put(result.get(position)[0], "Actinic Keratosis");
         digMap.put(result.get(position)[1], "Basal Cell Carcinoma");
         digMap.put(result.get(position)[2], "Melanoma");
         digMap.put(result.get(position)[3], "Nevus");
         digMap.put(result.get(position)[4], "Seborrheic Keratosis");
         digMap.put(result.get(position)[5], "Squamous Cell Carcinoma");
-        List<Float> list = new ArrayList<> ();
+        List<Float> list = new ArrayList<>();
         list.addAll(digMap.keySet());
         Collections.sort(list, null);
-        match += "It probably was " + digMap.get(list.get(list.size() - 1)) + "\n\nClick here to see details";
+        match += "It probably was " + digMap.get(list.get(list.size() - 1)) + "\n*Click here to see details*";
 
         textViewMatch.setText(match);
         textViewDate.setText(time.get(position));
@@ -108,7 +109,8 @@ public class TrackListAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 TrackDaoClass database = TrackDatabaseClass.getDatabase(context.getApplicationContext()).getDao();
-                int curKey = keys.get(position);;
+                int curKey = keys.get(position);
+                ;
                 if (isTrack) {
                     TrackModel model = database.loadSingle(curKey);
                     if (model.isHead()) {
@@ -150,7 +152,7 @@ public class TrackListAdapter extends BaseAdapter {
     private int getHead(int id) {
         TrackDaoClass dao = TrackDatabaseClass.getDatabase(context).getDao();
         TrackModel model = dao.loadSingle(id);
-        while(!model.isHead()) {
+        while (!model.isHead()) {
             model = dao.findParent(model.getKey());
         }
         return model.getKey();

@@ -18,6 +18,7 @@
         android:text="Sample Text"
         android:textColor="@color/header_text_color"
         android:textSize="17sp"
+        android:lineSpacingExtra="10dp"
         tools:ignore="HardcodedText" />
 
     <TextView

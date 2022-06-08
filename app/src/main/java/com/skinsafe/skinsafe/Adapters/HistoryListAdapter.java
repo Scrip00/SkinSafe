@@ -1,5 +1,6 @@
 package com.skinsafe.skinsafe.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -76,7 +77,7 @@ public class HistoryListAdapter extends BaseAdapter {
         List<Float> list = new ArrayList<> ();
         list.addAll(digMap.keySet());
         Collections.sort(list, null);
-        match += "It probably was " + digMap.get(list.get(list.size() - 1)) + "\n\nClick here to see details";
+        match += "It probably was " + digMap.get(list.get(list.size() - 1)) + "\n*Click here to see details*";
 
         textViewMatch.setText(match);
         textViewDate.setText(time.get(position));
@@ -88,6 +89,7 @@ public class HistoryListAdapter extends BaseAdapter {
                 intent.putExtra("imageBitmap", image.get(position));
                 intent.putExtra("saveOrNot", false);
                 context.startActivity(intent);
+                ((Activity) context).finish();
             }
         });
         deleteView.setOnClickListener(new View.OnClickListener() {

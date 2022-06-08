@@ -27,6 +27,7 @@ public class TrackFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_track, container, false);
+        getActivity().overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
 
         Button createNewTrack = rootView.findViewById(R.id.createNewTrack);
 

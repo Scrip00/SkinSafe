@@ -73,6 +73,7 @@ public class TrackDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_details);
+        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
 
         spinner = findViewById(R.id.items_spinner);
         takeNewBtn = findViewById(R.id.takeNewBtn);
@@ -140,7 +141,7 @@ public class TrackDetailsActivity extends AppCompatActivity {
         } else {
             id = Integer.parseInt(getIntent().getExtras().get("ID").toString());
         }
-        if (id == -1) {
+        if (id == -1 || !ifModelExists(id)) {
             probabilityTextView.setText("You haven't created a new track yet");
             comparisonTextView.setText("To do this, scan new formation by pressing the buttons below");
             progressTextView.setText("Do not forget to enter track name and place on your body");
@@ -369,7 +370,7 @@ public class TrackDetailsActivity extends AppCompatActivity {
         DecimalFormat df = new DecimalFormat("#.##");
         str += "Probably it's: " + digMap.get(list.get(5)) + "\nThe chance is: " + df.format(list.get(5) * 100) + "%";
         if (model.isHead()) str += "\nThis is your very first scan";
-        str += "\nClick here to see details";
+        str += "\n*Click here to see details*";
         return str;
     }
 
@@ -442,6 +443,11 @@ public class TrackDetailsActivity extends AppCompatActivity {
             intent.putExtra("track", findTale(id));
             startActivity(intent);
         }
+    }
+
+    private boolean ifModelExists(int id) {
+        TrackModel model = TrackDatabaseClass.getDatabase(this).getDao().loadSingle(id);
+        return model != null;
     }
 
     private int findTale(int id) {

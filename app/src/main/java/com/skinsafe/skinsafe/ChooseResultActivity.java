@@ -123,12 +123,10 @@ public class ChooseResultActivity extends AppCompatActivity {
                         x = (int) (x - width * scaleInt);
                         y = (int) (y - width * scaleInt);
                         width = (int) (width * (1 + scaleInt * 2));
-                        if (x < 0) x = 0;
-                        if (y < 0) y = 0;
-                        // If box is too big !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                        // По-моему хуйня
                         if (x + width > initialImage.getWidth()) x = initialImage.getWidth() - width;
                         if (y + width > initialImage.getHeight()) y = initialImage.getHeight() - width;
+                        if (x < 0) x = 0;
+                        if (y < 0) y = 0;
                         if (x + width > initialImage.getWidth()) width = initialImage.getWidth();
                         if (y + width > initialImage.getHeight()) width = initialImage.getHeight();
                         resizedBmp = Bitmap.createBitmap(initialImage, x, y, width, width);

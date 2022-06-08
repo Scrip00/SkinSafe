@@ -45,6 +45,7 @@ public class ResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
+
         ImageView photoImage = findViewById(R.id.photoImage);
         mainDig = findViewById(R.id.mainDig);
         secondDig0 = findViewById(R.id.secondDig0);
@@ -123,6 +124,8 @@ public class ResultActivity extends AppCompatActivity {
     public void onBackPressed() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        finish();
     }
 
     private void saveToHistoryDatabase(float[] output, Bitmap bitMap) {

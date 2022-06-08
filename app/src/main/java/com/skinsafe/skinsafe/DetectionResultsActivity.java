@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -61,7 +64,7 @@ public class DetectionResultsActivity extends AppCompatActivity {
                 textName.setText("Melanoma, malignant");
                 textName.setTextColor(Color.RED);
                 textDescription.setText("REMEMBER, it's very difficult to tell a melanoma from a normal mole, so you should really consider getting a consultation if the risk is over 65%, but don't forget to stay vigilant!\n\n" +
-                "Melanoma, the most serious type of skin cancer, develops in the cells (melanocytes) that produce melanin — the pigment that gives your skin its color. Melanoma can also form in your eyes and, rarely, inside your body, such as in your nose or throat.\n" +
+                        "Melanoma, the most serious type of skin cancer, develops in the cells (melanocytes) that produce melanin — the pigment that gives your skin its color. Melanoma can also form in your eyes and, rarely, inside your body, such as in your nose or throat.\n" +
                         "\n" +
                         "The exact cause of all melanomas isn't clear, but exposure to ultraviolet (UV) radiation from sunlight or tanning lamps and beds increases your risk of developing melanoma. Limiting your exposure to UV radiation can help reduce your risk of melanoma.\n" +
                         "\n" +
